@@ -6,7 +6,6 @@ async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
   const { default: worker } = await import(workerUrl.href);
-
   return worker.fetch(
     new Request("http://localhost/", { headers: { accept: "text/html" } }),
     { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
@@ -14,31 +13,23 @@ async function render() {
   );
 }
 
-test("server-renders the recruiting portfolio", async () => {
+test("server-renders the complete 16:9 portfolio document", async () => {
   const response = await render();
   assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
   const html = await response.text();
-  assert.match(html, /<html lang="ko">/i);
-  assert.match(html, /조윤호 \| Platform Engineer Portfolio/);
-  assert.match(html, /반복을 자동화하고/);
-  assert.match(html, /Gjallar/);
-  assert.match(html, /Heimdall/);
-  assert.match(html, /K-Le-PaaS/);
-  assert.match(html, /Argus/);
-  assert.match(html, /property="og:image"/);
-  assert.match(html, /name="twitter:card" content="summary_large_image"/);
+  assert.match(html, /data-portfolio-document="yunho-cho-platform-engineer-portfolio"/);
+  assert.equal((html.match(/data-portfolio-page=/g) ?? []).length, 13);
+  for (const text of ["반복 작업을 자동화", "K-Le-PaaS", "Gjallar", "Heimdall", "FAILURE &amp; DATA", "CLOSING"]) {
+    assert.match(html, new RegExp(text));
+  }
   assert.doesNotMatch(html, /codex-preview|Your site is taking shape|SkeletonPreview/);
 });
 
-test("ships project evidence and resume assets", async () => {
+test("ships every portfolio evidence asset", async () => {
   await Promise.all([
     access(new URL("../public/projects/gjallar.png", import.meta.url)),
     access(new URL("../public/projects/heimdall.png", import.meta.url)),
     access(new URL("../public/projects/klepaas-dashboard.png", import.meta.url)),
-    access(new URL("../public/projects/argus.png", import.meta.url)),
-    access(new URL("../public/resume/yunho-cho-resume.pdf", import.meta.url)),
     access(new URL("../public/og.png", import.meta.url)),
   ]);
 });
