@@ -1,0 +1,13 @@
+{
+  "name": "cho-yunho-portfolio-pdf",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "pdf": "node scripts/export-pdf.mjs",
+    "capture": "node scripts/capture-pages.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
+  }
+}

@@ -1,0 +1,1065 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>조윤호 - Platform Engineer Portfolio</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./slides.css" />
+  </head>
+  <body>
+    <main class="deck" aria-label="조윤호 Platform Engineer 포트폴리오">
+      <section class="slide slide--cover" data-slide-title="Cover">
+        <header class="slide__masthead">
+          <span>YUNHO CHO / SELECTED WORK</span>
+          <span>2025-2026</span>
+        </header>
+
+        <div class="cover__layout">
+          <div class="cover__copy">
+            <div class="cover__identity">
+              <strong>조윤호</strong>
+              <span>Platform Engineer</span>
+            </div>
+
+            <h1>
+              배포 흐름을 만들고,<br />
+              <em>운영까지 설계합니다.</em>
+            </h1>
+
+            <p class="cover__summary">
+              Git 기반 Preview 배포와<br />
+              Kubernetes·Proxmox 운영 도구를 구현합니다.
+            </p>
+          </div>
+
+          <aside class="operation-trace" aria-label="Commit에서 Preview까지의 배포 흐름">
+            <div class="operation-trace__label">
+              <span>DEPLOYMENT TRACE</span>
+              <span>HM-01</span>
+            </div>
+
+            <ol class="trace-list">
+              <li>
+                <span class="trace-list__index">01</span>
+                <div><strong>COMMIT</strong><small>exact SHA</small></div>
+              </li>
+              <li>
+                <span class="trace-list__index">02</span>
+                <div><strong>BUILD</strong><small>isolated candidate</small></div>
+              </li>
+              <li>
+                <span class="trace-list__index">03</span>
+                <div><strong>VERIFY</strong><small>health + route</small></div>
+              </li>
+              <li class="is-active">
+                <span class="trace-list__index">04</span>
+                <div><strong>ACTIVE</strong><small>stable preview</small></div>
+              </li>
+            </ol>
+
+            <div class="operation-trace__result">
+              <span class="status-dot"></span>
+              <span>VERIFIED PATH</span>
+              <strong>READY</strong>
+            </div>
+          </aside>
+        </div>
+
+        <footer class="slide__footer slide__footer--cover">
+          <span>yoonman.page</span>
+          <span>github.com/CodingPenguin-yoon</span>
+          <span>code.penguin.yoon@gmail.com</span>
+          <span>01 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--profile" data-slide-title="Engineer profile">
+        <header class="slide__masthead">
+          <span>01 / ENGINEER PROFILE</span>
+          <span>PLATFORM ENGINEERING</span>
+        </header>
+
+        <div class="profile__intro">
+          <h2>실행한 뒤,<br />실제 상태를 다시 확인합니다.</h2>
+          <p>
+            Git commit을 Docker Preview로 배포하고, 자연어 명령을 Kubernetes 작업으로 연결하며,
+            Proxmox VM 변경 결과를 다시 확인하는 도구를 만들었습니다.
+          </p>
+        </div>
+
+        <div class="work-index" aria-label="대표 프로젝트와 핵심 역할">
+          <article class="work-row">
+            <span class="work-row__number">01</span>
+            <div class="work-row__project">
+              <strong>Heimdall</strong>
+              <span>Preview Deployment</span>
+            </div>
+            <p>Exact commit을 빌드하고 health와 route를 확인한 뒤 Preview를 전환합니다.</p>
+            <span class="work-row__verb">DEPLOY</span>
+          </article>
+
+          <article class="work-row">
+            <span class="work-row__number">02</span>
+            <div class="work-row__project">
+              <strong>K-Le-PaaS</strong>
+              <span>Kubernetes Operations</span>
+            </div>
+            <p>자연어 요청을 Kubernetes 조회·실행 API와 외부 URL 흐름으로 연결했습니다.</p>
+            <span class="work-row__verb">OPERATE</span>
+          </article>
+
+          <article class="work-row">
+            <span class="work-row__number">03</span>
+            <div class="work-row__project">
+              <strong>Gjallar</strong>
+              <span>Proxmox Operations</span>
+            </div>
+            <p>API 작업은 task와 실제 상태를, guided 작업은 after-state를 다시 확인합니다.</p>
+            <span class="work-row__verb">VERIFY</span>
+          </article>
+        </div>
+
+        <div class="validation-band">
+          <div>
+            <span class="section-label">VALIDATION ENVIRONMENT</span>
+            <strong>Heimdall은 홈랩 배포로, Gjallar 최신 구조는 자동 테스트와 production build로 검증했습니다.</strong>
+          </div>
+          <p>Proxmox VE 3-node</p>
+          <p>IPFire segmentation</p>
+          <p>NAS / NFS</p>
+          <p>WireGuard / OCI proxy</p>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>DEPLOYMENT AUTOMATION / INFRASTRUCTURE OPERATIONS</span>
+          <span>02 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--evolution" data-slide-title="Design evolution">
+        <header class="slide__masthead">
+          <span>02 / DESIGN RETROSPECTIVE</span>
+          <span>ONE QUESTION · TWO RESPONSIBILITIES</span>
+        </header>
+
+        <div class="evolution__intro">
+          <h2>하나의 질문에서,<br />두 개의 책임으로.</h2>
+          <p>
+            K-Le-PaaS에서 운영 흐름을 연결하며 남은 ‘실행 뒤 무엇을 성공이라 할 것인가’라는 질문을,
+            개인 프로젝트에서는 배포와 Proxmox 운영이라는 서로 다른 책임으로 나눠 다뤘습니다.
+          </p>
+        </div>
+
+        <div class="design-branch" aria-label="K-Le-PaaS 경험에서 나뉜 Heimdall과 Gjallar의 설계 책임">
+          <article class="design-branch__root">
+            <div><span>TEAM PROJECT / 2025.09-12</span><strong>K-LE-PAAS</strong></div>
+            <h3>흩어진 운영 흐름을 연결했습니다.</h3>
+            <p>자연어 요청, Kubernetes 실행, 외부 URL과 모니터링 결과를 하나의 운영 경험으로 연결했습니다.</p>
+          </article>
+
+          <div class="design-branch__question">
+            <span>QUESTION</span>
+            <strong>요청을 실행한 뒤, 어떤 근거로 성공을 판단할 것인가?</strong>
+          </div>
+
+          <div class="design-branch__children">
+            <article>
+              <div><span>DEPLOYMENT CONTROL</span><strong>HEIMDALL</strong></div>
+              <h3>검증된 Preview만 활성화합니다.</h3>
+              <p>commit과 설정을 고정하고 candidate health와 적용된 route를 probe한 뒤 active Preview를 확정합니다.</p>
+            </article>
+            <article>
+              <div><span>INFRASTRUCTURE OPERATIONS</span><strong>GJALLAR</strong></div>
+              <h3>VM 변경 뒤 실제 상태를 확인합니다.</h3>
+              <p>API 작업과 guided 작업을 각기 다른 실행·사후 확인 절차로 마무리합니다.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="evolution__decision">
+          <span>CODE HISTORY</span>
+          <strong>현재 두 제품은 서로 다른 코드베이스와 제품 경계를 가집니다.</strong>
+          <p>Gjallar는 초기 Heimdall snapshot에서 Proxmox 운영으로 재정의됐고, 현재 Heimdall Python은 이후 별도로 재구축됐습니다.</p>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>DESIGN RETROSPECTIVE / NOT A RELEASE TIMELINE</span>
+          <span>03 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--heimdall" data-slide-title="Heimdall opener">
+        <header class="slide__masthead">
+          <span>03 / SELECTED PROJECT 01</span>
+          <span>PERSONAL PROJECT · ALPHA · SINGLE-HOST</span>
+        </header>
+
+        <div class="heimdall__layout">
+          <div class="heimdall__copy">
+            <p class="project-kicker">HEIMDALL</p>
+            <h2>Git commit에서<br />안정적인 Preview까지.</h2>
+            <p class="heimdall__summary">
+              공개 GitHub 저장소의 <code>main</code> commit을 격리된 Docker candidate로 빌드하고,
+              health 확인과 적용된 route의 probe를 통과한 경우에만 active Preview로 확정합니다.
+            </p>
+
+            <div class="heimdall__claim">
+              <span>CORE PRINCIPLE</span>
+              <strong>route를 적용한 뒤 실제 응답까지 확인해야<br />active Preview로 확정합니다.</strong>
+            </div>
+          </div>
+
+          <div class="heimdall__visual">
+            <figure class="system-map" aria-label="Heimdall Control Plane과 Preview runtime 구조">
+              <figcaption>
+                <span>DEPLOYMENT BOUNDARY</span>
+                <span>CONTROL / RUNTIME</span>
+              </figcaption>
+
+              <div class="system-map__lane">
+                <span class="system-map__lane-label">CONTROL PLANE</span>
+                <div class="system-map__chain">
+                  <span class="system-map__node">Browser</span>
+                  <i>→</i>
+                  <span class="system-map__node is-accent">FastAPI</span>
+                  <i>↔</i>
+                  <span class="system-map__node">Control DB</span>
+                </div>
+              </div>
+
+              <div class="system-map__handoff">
+                <span>durable job + immutable snapshot</span>
+                <i>↓</i>
+              </div>
+
+              <div class="system-map__lane system-map__lane--runtime">
+                <span class="system-map__lane-label">PREVIEW RUNTIME</span>
+                <div class="system-map__chain system-map__chain--runtime">
+                  <span class="system-map__node">Worker</span>
+                  <i>→</i>
+                  <span class="system-map__node">Candidate</span>
+                  <i>→</i>
+                  <span class="system-map__node is-check">Service Health</span>
+                  <i>→</i>
+                  <span class="system-map__node is-active">NGINX + Route Probe</span>
+                </div>
+              </div>
+
+              <div class="system-map__result">
+                <span class="status-dot"></span>
+                <strong>ACTIVE PREVIEW</strong>
+                <small>checks passed</small>
+              </div>
+            </figure>
+
+            <div class="scope-note">
+              <span>CURRENT SCOPE</span>
+              <p>Public GitHub · fixed main · manual deployment · single Docker host</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-signals" aria-label="Heimdall current product signals">
+          <div><span>INPUT</span><strong>PUBLIC GITHUB / FIXED MAIN</strong></div>
+          <div><span>EXECUTOR</span><strong>WORKER OWNS DOCKER SOCKET</strong></div>
+          <div><span>OUTPUT</span><strong>LOOPBACK PREVIEW ENDPOINT</strong></div>
+          <div class="is-active"><span>BOUNDARY</span><strong>MANUAL / SINGLE-HOST ALPHA</strong></div>
+        </div>
+
+        <div class="project-meta">
+          <p><span>ROLE</span>설계 / FastAPI 백엔드 / 배포 Worker / React UI</p>
+          <p><span>STACK</span>Git · Docker · NGINX · FastAPI · React · PostgreSQL</p>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>HEIMDALL / GIT-BASED PREVIEW DEPLOYMENT</span>
+          <span>04 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--lifecycle" data-slide-title="Heimdall deployment lifecycle">
+        <header class="slide__masthead">
+          <span>03 / PROJECT 01 · SYSTEM FLOW</span>
+          <span>HEIMDALL / DEPLOYMENT LIFECYCLE</span>
+        </header>
+
+        <div class="page-heading page-heading--wide">
+          <div>
+            <p class="page-heading__kicker">VERIFIED PROMOTION</p>
+            <h2>동작을 확인한 candidate만<br />Preview가 됩니다.</h2>
+          </div>
+          <p>
+            배포 대상을 먼저 고정하고, 기존 Preview와 분리된 환경에서 candidate service를 확인합니다.
+            NGINX route 적용 뒤 실제 endpoint 응답까지 확인해야 active metadata가 확정됩니다.
+          </p>
+        </div>
+
+        <ol class="lifecycle" aria-label="Heimdall 배포 lifecycle">
+          <li>
+            <span class="lifecycle__number">01</span>
+            <div class="lifecycle__symbol">R</div>
+            <strong>REGISTER</strong>
+            <p>repository<br />service · env<br />route · health</p>
+          </li>
+          <li>
+            <span class="lifecycle__number">02</span>
+            <div class="lifecycle__symbol">S</div>
+            <strong>SNAPSHOT</strong>
+            <p>exact commit<br />immutable<br />configuration</p>
+          </li>
+          <li>
+            <span class="lifecycle__number">03</span>
+            <div class="lifecycle__symbol">B</div>
+            <strong>BUILD</strong>
+            <p>exact checkout<br />service image<br />isolated candidate</p>
+          </li>
+          <li>
+            <span class="lifecycle__number">04</span>
+            <div class="lifecycle__symbol">V</div>
+            <strong>VERIFY</strong>
+            <p>service health<br />candidate config<br />readiness check</p>
+          </li>
+          <li class="is-active">
+            <span class="lifecycle__number">05</span>
+            <div class="lifecycle__symbol">P</div>
+            <strong>PROMOTE</strong>
+            <p>NGINX apply<br />route probe<br />active metadata</p>
+          </li>
+        </ol>
+
+        <div class="boundary-strip">
+          <div>
+            <span>CONTROL API</span>
+            <strong>의도와 상태를 기록</strong>
+            <p>프로젝트 설정, immutable snapshot, job event, 제한된 진단 로그</p>
+          </div>
+          <i>→</i>
+          <div class="boundary-strip__worker">
+            <span>DEPLOYMENT WORKER</span>
+            <strong>runtime 변경을 전담</strong>
+            <p>Docker socket은 Worker에만 연결하고 API와 실행 권한을 분리</p>
+          </div>
+          <i>→</i>
+          <div>
+            <span>PREVIEW RUNTIME</span>
+            <strong>probe를 통과한 Preview를 확정</strong>
+            <p>candidate와 active Preview runtime을 분리하고 route 적용 뒤 endpoint를 확인</p>
+          </div>
+        </div>
+
+        <p class="implementation-note">
+          <span>IMPLEMENTATION NOTE</span>
+          Control Plane Compose와 프로젝트별 Preview runtime은 수명 주기와 권한이 분리되어 있습니다.
+        </p>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>HEIMDALL / PIN · BUILD · VERIFY · PROMOTE</span>
+          <span>05 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--failure" data-slide-title="Heimdall failure handling">
+        <header class="slide__masthead">
+          <span>03 / PROJECT 01 · FAILURE HANDLING</span>
+          <span>HEIMDALL / EVIDENCE & BOUNDARY</span>
+        </header>
+
+        <div class="page-heading page-heading--compact">
+          <div>
+            <p class="page-heading__kicker">FAILURE IS A STATE</p>
+            <h2>candidate 실패 뒤 기존 Preview<br />경로의 복구를 시도합니다.</h2>
+          </div>
+        </div>
+
+        <div class="failure-grid">
+          <div class="failure-cases">
+            <article>
+              <span>01 / ROUTE CHECK FAILURE</span>
+              <h3>실패한 route를 active로 확정하지 않습니다.</h3>
+              <p>NGINX route를 적용한 뒤 probe가 실패하면 active Preview metadata를 확정하지 않고 기존 정상 route의 복구를 시도합니다.</p>
+            </article>
+            <article>
+              <span>02 / INTEGRATION EVIDENCE</span>
+              <h3>두 번째 배포가 실패해도 이전 응답이 남습니다.</h3>
+              <p>실패한 재배포 뒤에도 기존 deployment ID, host port, HTTP response가 유지되는 경로를 통합 테스트로 확인했습니다.</p>
+            </article>
+            <article>
+              <span>03 / UNCERTAIN RUNTIME</span>
+              <h3>모르는 상태를 성공으로 바꾸지 않습니다.</h3>
+              <p>runtime 상태가 불명확하면 자동 성공이나 즉시 삭제로 단정하지 않고 reconciliation이 필요한 상태로 보존합니다.</p>
+            </article>
+          </div>
+
+          <aside class="scope-board">
+            <div class="scope-board__header">
+              <span>CURRENT PRODUCT BOUNDARY</span>
+              <strong>ALPHA / SINGLE-HOST</strong>
+            </div>
+            <div class="scope-board__column">
+              <span>SUPPORTED NOW</span>
+              <ul>
+                <li>Public GitHub repository</li>
+                <li>Fixed <code>main</code> branch</li>
+                <li>Manual deployment</li>
+                <li>Docker candidate + NGINX route</li>
+                <li>Loopback Preview endpoint</li>
+                <li>External managed PostgreSQL provisioning</li>
+              </ul>
+            </div>
+            <div class="scope-board__column scope-board__column--muted">
+              <span>NOT INCLUDED YET</span>
+              <ul>
+                <li>Private Git / webhook / auto deploy</li>
+                <li>Public domain / TLS</li>
+                <li>Multi-host / multi-user</li>
+                <li>Image or data rollback</li>
+              </ul>
+            </div>
+          </aside>
+        </div>
+
+        <div class="reference-row" aria-label="Heimdall implementation references">
+          <span>IMPLEMENTATION REFERENCES</span>
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final/blob/main/backend/tests/test_nginx_gateway.py">NGINX gateway tests ↗</a>
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final/blob/main/backend/tests/integration/test_worker_runtime_smoke.py">Worker runtime smoke ↗</a>
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final/blob/main/project-docs/product-scope.md">Product scope ↗</a>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>HEIMDALL / FAILURE CONTAINMENT</span>
+          <span>06 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--klepaas" data-slide-title="K-Le-PaaS opener">
+        <header class="slide__masthead">
+          <span>04 / SELECTED PROJECT 02</span>
+          <span>TEAM PROJECT · 2025.09-2025.12</span>
+        </header>
+
+        <div class="project-opener">
+          <div class="project-opener__copy">
+            <p class="project-kicker">K-LE-PAAS</p>
+            <h2>여러 운영 도구를<br />하나의 흐름으로.</h2>
+            <p>
+              웹과 Slack의 자연어 요청을 Kubernetes와 NCP 운영 흐름에 연결하고,
+              실행 결과와 접근 정보를 다시 전달하는 팀 기반 클라우드 운영 플랫폼입니다.
+            </p>
+            <div class="project-opener__role">
+              <span>MY CONTRIBUTION</span>
+              <strong>NLP commands / Kubernetes API /<br />Deployment URL / NKS Monitoring</strong>
+            </div>
+          </div>
+
+          <div class="klepaas-flow" aria-label="K-Le-PaaS request to result flow">
+            <div class="klepaas-flow__rail">
+              <article>
+                <span>01</span>
+                <strong>REQUEST</strong>
+                <p>Web · Slack<br />natural language</p>
+              </article>
+              <i>→</i>
+              <article>
+                <span>02</span>
+                <strong>INTERPRET</strong>
+                <p>intent · entity<br />CommandPlan</p>
+              </article>
+              <i>→</i>
+              <article>
+                <span>03</span>
+                <strong>EXECUTE</strong>
+                <p>Kubernetes<br />NCP workflow</p>
+              </article>
+              <i>→</i>
+              <article class="is-active">
+                <span>04</span>
+                <strong>REPORT</strong>
+                <p>result · URL<br />metrics</p>
+              </article>
+            </div>
+
+            <div class="klepaas-flow__map">
+              <div>
+                <span>INPUT LAYER</span>
+                <strong>운영 요청을 한곳에서 받습니다.</strong>
+              </div>
+              <div>
+                <span>EXECUTION LAYER</span>
+                <strong>명령 해석과 실제 실행을 분리합니다.</strong>
+              </div>
+              <div>
+                <span>FEEDBACK LAYER</span>
+                <strong>결과, 외부 URL, 지표를 다시 연결합니다.</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-meta project-meta--opener">
+          <p><span>CONTEXT</span>한국인공지능·소프트웨어산업협회 Cloud 과정 팀 프로젝트</p>
+          <p><span>STACK</span>Kubernetes · Gemini · FastAPI · Prometheus · WebSocket · NCP</p>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>K-LE-PAAS / CONNECTING OPERATIONS</span>
+          <span>07 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--contribution" data-slide-title="K-Le-PaaS contribution">
+        <header class="slide__masthead">
+          <span>04 / PROJECT 02 · CONTRIBUTION</span>
+          <span>K-LE-PAAS / COMMAND TO EXTERNAL URL</span>
+        </header>
+
+        <div class="contribution-layout">
+          <div class="contribution-copy">
+            <div class="page-heading page-heading--stacked">
+              <p class="page-heading__kicker">MY CONTRIBUTION</p>
+              <h2>자연어 요청을 실행·조회 API와<br />외부 URL까지 연결했습니다.</h2>
+            </div>
+
+            <ol class="contribution-list">
+              <li>
+                <span>01</span>
+                <div>
+                  <strong>NLP + KUBERNETES OPERATIONS</strong>
+                  <p>Gemini가 해석한 요청을 intent와 entity로 구조화하고 상태·로그·외부 URL·재시작·스케일링·버전 롤백·리소스 조회 함수와 연결했습니다.</p>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <strong>DEPLOYMENT ACCESS</strong>
+                  <p>Ingress 외부 주소와 NCP SourceDeploy 흐름의 사용자·저장소별 service URL을 생성하고 저장·조회하는 경로를 구현했습니다.</p>
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <strong>NKS MONITORING</strong>
+                  <p>Prometheus의 CPU·memory·disk·network 지표를 API와 WebSocket endpoint로 제공했습니다.</p>
+                </div>
+              </li>
+            </ol>
+
+            <p class="team-scope-note">
+              <span>TEAM SCOPE</span>
+              웹 콘솔, 인증, 전체 배포 pipeline, Slack 연동은 팀이 함께 구성했습니다.
+            </p>
+          </div>
+
+          <figure class="product-shot product-shot--url">
+            <div class="product-shot__chrome">
+              <span>K-LE-PAAS / TEAM DEMO UI</span>
+              <span>INGRESS · HTTPS · SERVICE URL</span>
+            </div>
+            <div class="product-shot__viewport">
+              <img src="./assets/images/klepaas-service-url.png" alt="자연어 요청으로 Kubernetes Service와 Ingress 외부 URL을 조회한 K-Le-PaaS 화면" />
+              <div class="shot-callout">
+                <span>CONTRIBUTED BACKEND FLOW</span>
+                <strong>REQUEST</strong>
+                <i>↓</i>
+                <strong>SERVICE + INGRESS LOOKUP</strong>
+                <i>↓</i>
+                <strong>EXTERNAL HTTPS URL</strong>
+              </div>
+            </div>
+            <figcaption>
+              <span>RESULT</span>
+              <p>서비스 정보와 Ingress host를 HTTPS URL로 구성해 하나의 결과 카드에 표시합니다.</p>
+            </figcaption>
+          </figure>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>K-LE-PAAS / MY CONTRIBUTION</span>
+          <span>08 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--evidence" data-slide-title="K-Le-PaaS implementation evidence">
+        <header class="slide__masthead">
+          <span>04 / PROJECT 02 · IMPLEMENTATION</span>
+          <span>K-LE-PAAS / MONITORING & MERGED PRS</span>
+        </header>
+
+        <div class="page-heading page-heading--evidence">
+          <div>
+            <p class="page-heading__kicker">IMPLEMENTATION REFERENCES</p>
+            <h2>직접 구현한 범위를 화면과 PR로 연결했습니다.</h2>
+          </div>
+          <p>팀 제품의 전체 기능과 개인 기여를 분리하고, 대표 구현을 세 개의 PR로 구분했습니다.</p>
+        </div>
+
+        <div class="evidence-layout">
+          <figure class="product-shot product-shot--monitoring">
+            <div class="product-shot__chrome">
+              <span>K-LE-PAAS / NKS MONITORING PROTOTYPE</span>
+              <span>NKS · PROMETHEUS · WEBSOCKET</span>
+            </div>
+            <div class="product-shot__viewport">
+              <img src="./assets/images/klepaas-monitoring.png" alt="CPU, memory, disk, network 지표를 보여주는 K-Le-PaaS NKS 실시간 모니터링 화면" />
+            </div>
+            <figcaption>
+              <span>TEAM UI / BACKEND FLOW CONTRIBUTION</span>
+              <p>NKS node의 CPU, memory, disk, network 값을 Prometheus에서 조회해 실시간 화면으로 연결했습니다.</p>
+            </figcaption>
+          </figure>
+
+          <div class="pr-list">
+            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/28">
+              <span class="pr-list__number">PR #28</span>
+              <strong>NLP / Kubernetes Operations</strong>
+              <p>자연어 해석 결과를 상태·로그·재시작과 Kubernetes resource 조회에 연결</p>
+              <small>MERGED ↗</small>
+            </a>
+            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/42">
+              <span class="pr-list__number">PR #42</span>
+              <strong>NKS Monitoring</strong>
+              <p>Prometheus 기반 CPU·memory·disk·network API와 WebSocket endpoint</p>
+              <small>MERGED ↗</small>
+            </a>
+            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/63">
+              <span class="pr-list__number">PR #63</span>
+              <strong>Deployment URL</strong>
+              <p>사용자·저장소별 service URL 생성, 저장, 조회 흐름</p>
+              <small>MERGED ↗</small>
+            </a>
+          </div>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>K-LE-PAAS / IMPLEMENTATION EVIDENCE</span>
+          <span>09 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--gjallar" data-slide-title="Gjallar responsibility boundary">
+        <header class="slide__masthead">
+          <span>05 / SELECTED PROJECT 03</span>
+          <span>PERSONAL PROJECT · PROXMOX OPERATIONS</span>
+        </header>
+
+        <div class="gjallar-intro">
+          <div>
+            <p class="project-kicker">GJALLAR</p>
+            <h2>같은 자동화라도<br />성공 기준은 달랐습니다.</h2>
+          </div>
+          <p>
+            Preview를 활성화하는 판단과 Proxmox의 실제 인프라를 변경하는 판단은
+            필요한 권한, 실패 방식, 성공을 확인하는 기준이 다릅니다.
+          </p>
+        </div>
+
+        <div class="responsibility-split">
+          <article>
+            <header>
+              <span>DEPLOYMENT CONTROL</span>
+              <strong>HEIMDALL</strong>
+            </header>
+            <div class="responsibility-split__flow">
+              <span>COMMIT</span><i>→</i><span>CANDIDATE</span><i>→</i><span>HEALTH + ROUTE</span><i>→</i><span>ACTIVE</span>
+            </div>
+            <dl>
+              <div><dt>성공 기준</dt><dd>Preview endpoint가 예상한 응답을 반환</dd></div>
+              <div><dt>주요 권한</dt><dd>repository checkout · Docker runtime · NGINX route</dd></div>
+              <div><dt>실패 처리</dt><dd>기존 정상 Preview 유지 · reconciliation</dd></div>
+            </dl>
+          </article>
+
+          <div class="responsibility-split__divider">
+            <span>DIFFERENT</span>
+            <strong>TRUST<br />BOUNDARY</strong>
+          </div>
+
+          <article class="is-gjallar">
+            <header>
+              <span>INFRASTRUCTURE OPERATIONS</span>
+              <strong>GJALLAR</strong>
+            </header>
+            <div class="responsibility-split__flow">
+              <span>LIVE STATE</span><i>→</i><span>PLAN</span><i>→</i><span>CONFIRM</span><i>→</i><span>POST-CHECK</span>
+            </div>
+            <dl>
+              <div><dt>성공 기준</dt><dd>API 작업은 task + actual state, guided 작업은 API after-state</dd></div>
+              <div><dt>주요 권한</dt><dd>RBAC · action-specific acknowledgement · Proxmox API</dd></div>
+              <div><dt>실패 처리</dt><dd>non-success 상태 보존 · 자동 mutation retry 금지</dd></div>
+            </dl>
+          </article>
+        </div>
+
+        <div class="retrospective-note">
+          <span>DESIGN RETROSPECTIVE</span>
+          <strong>같은 ‘운영 자동화’라도 실제 자원을 바꾸는 권한과 성공 판정은 분리해야 했습니다.</strong>
+          <p>Gjallar는 Proxmox 운영만을 다루는 별도 control surface로 제품 책임을 좁혔습니다.</p>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>GJALLAR / RESPONSIBILITY BOUNDARY</span>
+          <span>10 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--operation-model" data-slide-title="Gjallar operation model">
+        <header class="slide__masthead">
+          <span>05 / PROJECT 03 · OPERATION MODEL</span>
+          <span>GJALLAR / SOURCE OF TRUTH</span>
+        </header>
+
+        <div class="page-heading page-heading--wide">
+          <div>
+            <p class="page-heading__kicker">OPERATION MODEL</p>
+            <h2>Proxmox는 실제 상태를,<br />Gjallar는 운영 판단을 소유합니다.</h2>
+          </div>
+          <p>운영 도구의 데이터가 실제 인프라 상태를 대신하지 않도록, 기록해야 할 것과 다시 조회해야 할 것을 나눴습니다.</p>
+        </div>
+
+        <div class="truth-model">
+          <article>
+            <span>SOURCE OF TRUTH</span>
+            <strong>PROXMOX VE</strong>
+            <ul>
+              <li>Node / VM inventory</li>
+              <li>Task reference and status</li>
+              <li>Observed resource state</li>
+              <li>Low-level execution result</li>
+            </ul>
+          </article>
+          <div class="truth-model__exchange">
+            <span>READ LIVE STATE</span>
+            <i>⇄</i>
+            <span>EXECUTE EXPLICIT CHANGE</span>
+          </div>
+          <article class="is-control">
+            <span>OPERATION RECORD</span>
+            <strong>GJALLAR</strong>
+            <ul>
+              <li>Operator intent and policy</li>
+              <li>Action-specific ack / approval evidence</li>
+              <li>Execution events and history</li>
+              <li>Post-check and reconciliation state</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="operation-modes">
+          <article>
+            <span>01</span>
+            <strong>MANAGED API</strong>
+            <p>Gjallar가 Proxmox API 작업을 실행하고 task와 변경 후 상태를 확인합니다.</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>GUIDED MANUAL</strong>
+            <p>짧은 유효시간의 지침만 발급하고, 작업은 운영자가 직접 수행한 뒤 API로 결과를 확인합니다.</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>OBSERVE ONLY</strong>
+            <p>capacity와 placement 신호는 조회 시 계산하며 자동 조치나 자동 balancing으로 이어지지 않습니다.</p>
+          </article>
+        </div>
+
+        <ol class="common-operation-flow" aria-label="Gjallar common operation flow">
+          <li><span>01</span><strong>OBSERVE</strong></li>
+          <li><span>02</span><strong>PLAN</strong></li>
+          <li><span>03</span><strong>CONFIRM</strong></li>
+          <li><span>04</span><strong>EXECUTE</strong></li>
+          <li><span>05</span><strong>VERIFY</strong></li>
+          <li class="is-active"><span>06</span><strong>RECORD</strong></li>
+        </ol>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>GJALLAR / OBSERVE · PLAN · EXECUTE · VERIFY</span>
+          <span>11 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--guarded" data-slide-title="Gjallar guarded execution">
+        <header class="slide__masthead">
+          <span>05 / PROJECT 03 · GUARDED EXECUTION</span>
+          <span>GJALLAR / POST-CHECKS</span>
+        </header>
+
+        <div class="page-heading page-heading--guarded">
+          <div>
+            <p class="page-heading__kicker">SUCCESS NEEDS EVIDENCE</p>
+            <h2>API 응답을 최종 성공으로<br />보지 않습니다.</h2>
+          </div>
+          <p>각 작업의 위험과 실행 방식에 맞는 확인 절차를 적용하고, Proxmox가 보여주는 변경 후 상태를 다시 조회합니다.</p>
+        </div>
+
+        <div class="guarded-cards">
+          <article>
+            <header><span>01</span><strong>CREATE VM</strong><small>MANAGED API</small></header>
+            <ol>
+              <li>exact plan + checksum 고정</li>
+              <li>yellow risk acknowledgement / red block</li>
+              <li>최종 mutation acknowledgement</li>
+              <li>native API dispatch + UPID tracking</li>
+              <li>생성 후 VM 상태 확인</li>
+            </ol>
+          </article>
+          <article>
+            <header><span>02</span><strong>VM START</strong><small>MANAGED API</small></header>
+            <ol>
+              <li>stopped, non-template VM 확인</li>
+              <li>action acknowledgement</li>
+              <li>idempotency key로 중복 요청 차단</li>
+              <li>task polling</li>
+              <li>observed state가 running인지 확인</li>
+            </ol>
+          </article>
+          <article>
+            <header><span>03</span><strong>GUIDED UNLOCK</strong><small>GUIDED MANUAL</small></header>
+            <ol>
+              <li>lock과 active task 사전 확인</li>
+              <li>risk ack + idempotency key</li>
+              <li>5분 instruction bundle 발급</li>
+              <li>운영자가 명령을 직접 수행</li>
+              <li>attestation 뒤 API로 lock 해제 확인</li>
+            </ol>
+          </article>
+        </div>
+
+        <div class="non-success-band">
+          <span>NON-SUCCESS PATH</span>
+          <div>
+            <strong>TIMEOUT</strong><small>응답 지연</small>
+          </div>
+          <i>·</i>
+          <div>
+            <strong>MISSING TASK</strong><small>task reference 없음</small>
+          </div>
+          <i>·</i>
+          <div>
+            <strong>POST-CHECK MISMATCH</strong><small>예상 상태와 불일치</small>
+          </div>
+          <p>성공으로 바꾸거나 자동 재실행하지 않고 상황에 따라 failed 또는 needs_reconciliation로 남깁니다.</p>
+        </div>
+
+        <p class="guarded-footnote">프로세스 비정상 종료 뒤의 완전한 자동 복구는 현재 지원하지 않습니다.</p>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>GJALLAR / ACTION-SPECIFIC GUARDS</span>
+          <span>12 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--scope" data-slide-title="Gjallar current scope">
+        <header class="slide__masthead">
+          <span>05 / PROJECT 03 · CURRENT SCOPE</span>
+          <span>GJALLAR / BOUNDARIES & LIMITS</span>
+        </header>
+
+        <div class="page-heading page-heading--scope">
+          <div>
+            <p class="page-heading__kicker">NARROW BY DESIGN</p>
+            <h2>현재 지원 범위를<br />의도적으로 좁게 유지합니다.</h2>
+          </div>
+          <p>지원하지 않는 작업까지 넓게 설명하기보다, 현재 구현하고 자동 테스트한 mutation과 조회 범위를 제품 경계로 명시했습니다.</p>
+        </div>
+
+        <div class="scope-columns">
+          <article class="scope-columns__supported">
+            <header><span>01</span><strong>SUPPORTED NOW</strong></header>
+            <ul>
+              <li><b>RBAC</b><span>viewer / operator / admin</span></li>
+              <li><b>LIVE INVENTORY</b><span>node / VM / storage / network / task</span></li>
+              <li><b>CREATE VM</b><span>plan, guards, UPID, post-check</span></li>
+              <li><b>GUARDED START</b><span>ack, idempotency, observed state</span></li>
+              <li><b>GUIDED UNLOCK</b><span>manual execution, API verification</span></li>
+              <li><b>OPERATIONS</b><span>history, risk, reconciliation state</span></li>
+              <li><b>INSIGHTS</b><span>request-time, read-only signals</span></li>
+            </ul>
+          </article>
+
+          <article class="connection-truth">
+            <header><span>02</span><strong>CONNECTION TRUTH</strong></header>
+            <div><span class="state-dot"></span><b>UNCONFIGURED</b><small>target 설정 없음</small></div>
+            <div><span class="state-dot is-live"></span><b>LIVE</b><small>실제 Proxmox 조회 가능</small></div>
+            <div><span class="state-dot is-degraded"></span><b>DEGRADED</b><small>연결 실패를 그대로 노출</small></div>
+            <p>Production runtime은 mock 또는 demo inventory로 대체하지 않습니다.</p>
+          </article>
+
+          <article class="scope-columns__excluded">
+            <header><span>03</span><strong>NOT CLAIMED</strong></header>
+            <ul>
+              <li>Stop / Shutdown / Reboot / Reset / Delete</li>
+              <li>Snapshot / Rollback</li>
+              <li>Arbitrary shell / SSH / <code>qm</code> executor</li>
+              <li>Autonomous remediation</li>
+              <li>Automatic balancing</li>
+              <li>Durable runner / complete restart recovery</li>
+              <li>Multi-instance distributed locking</li>
+            </ul>
+          </article>
+        </div>
+
+        <div class="maintenance-note">
+          <span>MAINTENANCE SURFACE</span>
+          <p>기존 DRS route는 read-only 추천·검사와 좁은 migration/reconciliation 호환 경로로 남아 있지만, 현재 제품 정체성은 VM 운영과 공통 operation 기록에 둡니다.</p>
+        </div>
+
+        <div class="validation-evidence">
+          <span>CURRENT CODE VALIDATION</span>
+          <strong>BACKEND / 457 TESTS</strong>
+          <strong>FRONTEND / 17 TESTS · LINT · BUILD</strong>
+          <strong>PRODUCTION IMAGE BUILD</strong>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>GJALLAR / CURRENT PRODUCT BOUNDARY</span>
+          <span>13 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--principles" data-slide-title="Engineering principles and validation environment">
+        <header class="slide__masthead">
+          <span>06 / ENGINEERING PRINCIPLES</span>
+          <span>VALIDATION ENVIRONMENT</span>
+        </header>
+
+        <div class="page-heading page-heading--principles">
+          <div>
+            <p class="page-heading__kicker">WHAT I LEARNED</p>
+            <h2>구현만큼 중요했던 건,<br />실행 결과를 판단하는 기준이었습니다.</h2>
+          </div>
+        </div>
+
+        <div class="principles-layout">
+          <ol class="principle-list">
+            <li><span>01</span><div><strong>PIN BEFORE EXECUTION</strong><p>실행 전에 commit, configuration, plan을 고정합니다.</p></div></li>
+            <li><span>02</span><div><strong>VERIFY THE REAL OUTCOME</strong><p>API 응답과 실제 resource 상태를 분리해서 확인합니다.</p></div></li>
+            <li><span>03</span><div><strong>PRESERVE UNCERTAINTY</strong><p>확인할 수 없는 상태를 성공으로 단정하지 않습니다.</p></div></li>
+            <li><span>04</span><div><strong>STATE THE BOUNDARY</strong><p>현재 지원 범위와 다음 단계의 기능을 구분합니다.</p></div></li>
+          </ol>
+
+          <figure class="network-map" aria-label="홈랩 validation environment network zones">
+            <figcaption>
+              <span>VALIDATION ENVIRONMENT</span>
+              <strong>PROXMOX 3-NODE / SEGMENTED NETWORK</strong>
+            </figcaption>
+            <div class="network-map__entry">
+              <span>CLIENT</span><i>→</i><span>OCI REVERSE PROXY</span><i>→</i><span>WIREGUARD</span>
+            </div>
+            <div class="network-map__firewall">
+              <span>IPFIRE</span>
+              <strong>NETWORK BOUNDARY</strong>
+            </div>
+            <div class="network-zones">
+              <article class="is-red">
+                <header><span>RED</span><small>TEST / INTERNAL</small></header>
+                <p>Heimdall<br />DNS + reverse proxy</p>
+              </article>
+              <article class="is-green">
+                <header><span>GREEN</span><small>MANAGEMENT</small></header>
+                <p>Proxmox 3 nodes<br />NAS / NFS storage</p>
+              </article>
+              <article class="is-orange">
+                <header><span>ORANGE</span><small>DMZ / PUBLIC</small></header>
+                <p>WireGuard gateway<br />public service VMs</p>
+              </article>
+            </div>
+            <div class="network-map__rule">
+              <span>POLICY</span>
+              <strong>RED → ORANGE</strong>
+              <p>allowed</p>
+              <strong>ORANGE → RED / GREEN</strong>
+              <p>blocked</p>
+            </div>
+          </figure>
+        </div>
+
+        <div class="environment-note">
+          <span>VALIDATION SCOPE</span>
+          <p>Heimdall의 single-host 배포와 Gjallar의 이전 Create VM 흐름은 홈랩에서 확인했습니다. Gjallar의 현재 Operations 구조는 자동 테스트와 production build로, K-Le-PaaS는 팀 NKS/NCP 환경에서 구현했습니다.</p>
+        </div>
+
+        <footer class="slide__footer">
+          <span>YUNHO CHO / PORTFOLIO</span>
+          <span>PRINCIPLES / VALIDATION ENVIRONMENT</span>
+          <span>14 / 15</span>
+        </footer>
+      </section>
+
+      <section class="slide slide--closing" data-slide-title="Contact">
+        <header class="slide__masthead">
+          <span>07 / CONTACT</span>
+          <span>YUNHO CHO / PLATFORM ENGINEER</span>
+        </header>
+
+        <div class="closing-layout">
+          <div class="closing-copy">
+            <p class="page-heading__kicker">CLOSING NOTE</p>
+            <h2>배포와 인프라 운영을 자동화하고,<br /><em>실행 후 실제 상태까지 확인합니다.</em></h2>
+            <p>
+              더 많은 기능보다 명확한 책임, 안전한 실행 경로,
+              확인할 수 있는 결과를 만드는 엔지니어입니다.
+            </p>
+          </div>
+
+          <aside class="closing-contact">
+            <div>
+              <span>NAME</span>
+              <strong>조윤호 / YUNHO CHO</strong>
+            </div>
+            <div>
+              <span>ROLE</span>
+              <strong>PLATFORM ENGINEER</strong>
+            </div>
+            <a href="https://yoonman.page">
+              <span>WEB</span>
+              <strong>yoonman.page ↗</strong>
+            </a>
+            <a href="https://github.com/CodingPenguin-yoon">
+              <span>GITHUB</span>
+              <strong>github.com/CodingPenguin-yoon ↗</strong>
+            </a>
+            <a href="mailto:code.penguin.yoon@gmail.com">
+              <span>EMAIL</span>
+              <strong>code.penguin.yoon@gmail.com ↗</strong>
+            </a>
+          </aside>
+        </div>
+
+        <div class="selected-links">
+          <span>SELECTED REPOSITORIES</span>
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final">HEIMDALL ↗</a>
+          <a href="https://github.com/K-Le-PaaS/backend-hybrid">K-LE-PAAS ↗</a>
+          <a href="https://github.com/CodingPenguin-yoon/Gjallar">GJALLAR ↗</a>
+        </div>
+
+        <footer class="slide__footer slide__footer--cover">
+          <span>yoonman.page</span>
+          <span>github.com/CodingPenguin-yoon</span>
+          <span>code.penguin.yoon@gmail.com</span>
+          <span>15 / 15</span>
+        </footer>
+      </section>
+    </main>
+
+    <nav class="viewer-controls" aria-label="슬라이드 이동">
+      <button type="button" data-direction="previous" aria-label="이전 슬라이드">↑</button>
+      <span><strong data-current-slide>1</strong> / <span data-slide-count>15</span></span>
+      <button type="button" data-direction="next" aria-label="다음 슬라이드">↓</button>
+    </nav>
+
+    <script type="module" src="./viewer.js"></script>
+  </body>
+</html>
