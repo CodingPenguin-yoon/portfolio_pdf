@@ -1,32 +1,21 @@
-# Yunho Cho - Platform Engineer Portfolio
+# Yunho Cho Portfolio
 
-16:9 HTML portfolio and PDF source for Yunho Cho's Platform Engineer portfolio.
+이 저장소는 현재 작업 중인 문서형 포트폴리오와 기존 16:9 발표형 포트폴리오를 분리해 관리한다.
 
-The 15-page narrative covers:
+- `portfolio/`: A4 페이지형 웹 문서와 PDF의 정본
+- `bak/16x9-slide-deck/`: 기존 16:9 HTML·PDF 자료의 읽기 전용 백업
 
-- the engineering profile and design retrospective;
-- Heimdall's verified Preview deployment lifecycle;
-- K-Le-PaaS command, deployment URL, and NKS monitoring contributions;
-- Gjallar's Proxmox operation boundaries and guarded execution model;
-- the validation environment and shared engineering principles.
+새로운 내용과 디자인 작업은 `portfolio/`에서만 진행한다. 기존 자료는 비교와 내용 회수를 위한
+백업으로 유지한다.
 
-## Preview
+## 기존 16:9 자료 실행
 
 ```bash
-pnpm install
+cd bak/16x9-slide-deck
 pnpm dev
 ```
 
-Open `http://127.0.0.1:4173`.
-
-## Export
-
 ```bash
+cd bak/16x9-slide-deck
 pnpm pdf
-pnpm capture
 ```
-
-- PDF: `output/pdf/cho-yunho-platform-engineer-portfolio.pdf`
-- Rendered page previews: `tmp/rendered/`
-
-The HTML source is the canonical artifact. PDF export uses the same 1600 x 900 CSS page size, fonts, diagrams, and linked implementation references.
