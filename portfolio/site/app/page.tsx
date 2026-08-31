@@ -1,446 +1,842 @@
-const workPrinciples = [
-  {
-    number: '01',
-    title: '반복을 먼저 찾습니다.',
-    body: '사람이 매번 복사하고 확인하고 연결하는 구간을 찾아 자동화의 경계로 삼습니다.',
-  },
-  {
-    number: '02',
-    title: '입력은 적게, 흐름은 하나로 만듭니다.',
-    body: '사용자가 알아야 할 세부 명령보다 원하는 결과에 집중할 수 있도록 실행 과정을 연결합니다.',
-  },
-  {
-    number: '03',
-    title: '성공의 기준을 실제 상태에 둡니다.',
-    body: '요청 접수에서 끝내지 않고 결과를 다시 확인하며 실패할 때 지켜야 할 상태를 정합니다.',
-  },
-];
+type PageProps = {
+  page: string;
+  section: string;
+  title: string;
+  className?: string;
+  children: React.ReactNode;
+};
 
-function PageMark({ current, label }: { current: string; label: string }) {
+function Page({ page, section, title, className = '', children }: PageProps) {
   return (
-    <div className="page-mark" aria-hidden="true">
-      <span>{label}</span>
-      <span>{current} / 06</span>
+    <section className={`sheet ${className}`} data-page-format="a4">
+      <header className="running-head">
+        <span>{section}</span>
+        <span>{title}</span>
+      </header>
+      {children}
+      <footer className="page-mark">
+        <span>YUNHO CHO · PLATFORM ENGINEER</span>
+        <span>{page} / 09</span>
+      </footer>
+    </section>
+  );
+}
+
+function Label({ children }: { children: React.ReactNode }) {
+  return <p className="label">{children}</p>;
+}
+
+function ProjectIntro({
+  number,
+  name,
+  category,
+  title,
+  summary,
+}: {
+  number: string;
+  name: string;
+  category: string;
+  title: string;
+  summary: string;
+}) {
+  return (
+    <div className="project-intro">
+      <div className="project-id">
+        <span>{number}</span>
+        <div>
+          <strong>{name}</strong>
+          <small>{category}</small>
+        </div>
+      </div>
+      <h1>{title}</h1>
+      <p>{summary}</p>
     </div>
   );
 }
 
-function ProjectHeader({
-  number,
-  name,
-  meta,
-}: {
-  number: string;
-  name: string;
-  meta: string;
-}) {
-  return (
-    <header className="project-header">
-      <span className="project-number">{number}</span>
-      <div>
-        <p className="project-name">{name}</p>
-        <p className="project-meta">{meta}</p>
-      </div>
-    </header>
-  );
-}
-
-function CaseRow({
+function CaseCard({
   label,
   title,
   children,
+  result = false,
 }: {
   label: string;
   title: string;
   children: React.ReactNode;
+  result?: boolean;
 }) {
   return (
-    <div className="case-row">
-      <p className="case-label">{label}</p>
-      <div>
-        <h3>{title}</h3>
-        <p>{children}</p>
-      </div>
-    </div>
+    <article className={`case-card ${result ? 'case-card-result' : ''}`}>
+      <Label>{label}</Label>
+      <h3>{title}</h3>
+      <p>{children}</p>
+    </article>
   );
 }
+
+const executionSteps = [
+  ['01', 'PIN', 'exact SHA와 설정 snapshot 고정'],
+  ['02', 'BUILD', '분리된 Docker candidate 빌드'],
+  ['03', 'CHECK', '서비스별 health 확인'],
+  ['04', 'ROUTE', 'NGINX 적용 후 endpoint probe'],
+  ['05', 'PROMOTE', '검증된 Preview만 활성화'],
+];
+
+const operationSteps = [
+  ['01', 'PLAN', 'live inventory로 사전 조건 계산'],
+  ['02', 'CONFIRM', '권한·승인·위험 확인'],
+  ['03', 'EXECUTE', '제한된 Proxmox API 변경'],
+  ['04', 'TRACK', 'UPID task 완료 상태 확인'],
+  ['05', 'POST-CHECK', '변경 후 실제 VM 상태 조회'],
+  ['06', 'RECORD', '성공 또는 재확인 상태 기록'],
+];
+
+const klepaasSteps = [
+  ['01', 'PARSE', '자연어를 command·parameters JSON으로 변환'],
+  ['02', 'VALIDATE', 'CommandRequest로 형식과 대상 검증'],
+  ['03', 'PLAN', '허용된 CommandPlan(tool, args) 생성'],
+  ['04', 'EXECUTE', 'Kubernetes Python Client API 호출'],
+  ['05', 'FEEDBACK', '상태·URL·메트릭을 사용자에게 반환'],
+];
 
 export default function Home() {
   return (
     <main className="portfolio-document">
-      <section className="sheet cover" data-page-format="a4" aria-label="표지">
-        <div className="sheet-topline">
-          <span>CHO YUNHO</span>
-          <span>PLATFORM ENGINEER · PORTFOLIO 2026</span>
-        </div>
-
-        <div className="cover-main">
-          <p className="kicker">WHAT I AUTOMATE</p>
+      <Page
+        page="01"
+        section="PORTFOLIO / 2026"
+        title="CHO YUNHO"
+        className="cover"
+      >
+        <div className="cover-copy">
+          <Label>PLATFORM ENGINEER</Label>
           <h1>
-            반복되는 인프라 작업을
-            <strong>책임질 수 있는 자동화로 바꿉니다.</strong>
+            반복되는 운영 절차를 줄이고,
+            <strong>실제 결과로 성공을 확인합니다.</strong>
           </h1>
-          <p className="cover-intro">
-            배포와 인프라 운영에서 사람이 계속 반복해야 하는 일을 발견하면 더 빠르게 사용할 수
-            있는 도구로 만듭니다. 그리고 자동화가 실패했을 때 무엇을 지켜야 하는지까지 함께
-            설계합니다.
-          </p>
-        </div>
-
-        <div className="cover-bottom">
-          <blockquote>
-            “반복하는 작업이 싫습니다.
-            <br />그 일을 자동화하는 것이 개발의 본질에 가깝다고 생각합니다.”
-          </blockquote>
-          <dl className="cover-proof">
-            <div>
-              <dt>약 5분</dt>
-              <dd>Heimdall · 저장소 등록부터 외부 URL까지</dd>
-            </div>
-            <div>
-              <dt>5개 작업</dt>
-              <dd>Gjallar · 실제 Proxmox 환경에서 검증</dd>
-            </div>
-            <div>
-              <dt>End-to-end</dt>
-              <dd>K-Le-PaaS · 자연어 요청에서 Kubernetes 실행까지</dd>
-            </div>
-          </dl>
-        </div>
-
-        <PageMark current="01" label="INTRODUCTION" />
-      </section>
-
-      <section className="sheet approach" data-page-format="a4" aria-label="작업 방식">
-        <div className="sheet-topline">
-          <span>CHO YUNHO</span>
-          <span>HOW I WORK</span>
-        </div>
-
-        <header className="page-heading">
-          <p className="kicker">OPERATING PRINCIPLE</p>
-          <h2>
-            자동화는 클릭 수를 줄이는 것에서
-            <strong>끝나지 않습니다.</strong>
-          </h2>
           <p>
-            귀찮음을 출발점으로 삼되, 반복을 없앤 뒤 생기는 새로운 책임까지 구현 범위로
-            생각합니다.
+            배포와 인프라 변경을 재사용 가능한 흐름으로 만들고, 요청 접수가
+            아니라 서비스와 자원의 실제 상태를 기준으로 완료 여부를 판단합니다.
           </p>
-        </header>
-
-        <div className="principle-list">
-          {workPrinciples.map((principle) => (
-            <article key={principle.number}>
-              <span>{principle.number}</span>
-              <h3>{principle.title}</h3>
-              <p>{principle.body}</p>
-            </article>
-          ))}
         </div>
-
-        <div className="decision-loop">
-          <p className="case-label">AUTOMATION LOOP</p>
-          <ol>
-            <li>
-              <span>REPEAT</span>
-              <strong>반복되는 일 발견</strong>
-            </li>
-            <li>
-              <span>ABSTRACT</span>
-              <strong>필요한 입력만 남김</strong>
-            </li>
-            <li>
-              <span>AUTOMATE</span>
-              <strong>하나의 흐름으로 연결</strong>
-            </li>
-            <li>
-              <span>VERIFY</span>
-              <strong>실제 상태로 결과 확인</strong>
-            </li>
-          </ol>
+        <div className="cover-projects">
+          <article>
+            <span>01</span>
+            <div>
+              <strong>Heimdall</strong>
+              <p>
+                저장소 등록부터 검증된 Preview 전환까지 반복 배포 절차를 자동화
+              </p>
+            </div>
+            <small>DEPLOYMENT</small>
+          </article>
+          <article>
+            <span>02</span>
+            <div>
+              <strong>Gjallar</strong>
+              <p>
+                Proxmox 변경을 승인·중복 방지·사후 확인으로 통제하는 운영 도구
+              </p>
+            </div>
+            <small>INFRASTRUCTURE</small>
+          </article>
+          <article>
+            <span>03</span>
+            <div>
+              <strong>K-Le-PaaS</strong>
+              <p>자연어 요청을 제한된 Kubernetes 실행 계획과 피드백으로 연결</p>
+            </div>
+            <small>KUBERNETES</small>
+          </article>
         </div>
+        <div className="cover-contact">
+          <strong>조윤호 · Platform Engineer</strong>
+          <div>
+            <span>github.com/CodingPenguin-yoon</span>
+            <span>code.penguin.yoon@gmail.com</span>
+            <span>yoonman.page</span>
+          </div>
+        </div>
+      </Page>
 
-        <aside className="fit-note">
-          <p>PLATFORM ENGINEER로서 만들고 싶은 것</p>
+      <Page page="02" section="ENGINEER PROFILE" title="RESPONSIBILITY MAP">
+        <div className="page-title compact-title">
+          <Label>HOW THE WORK EVOLVED</Label>
+          <h1>제어 대상과 성공 조건을 나눠 운영 자동화를 설계했습니다.</h1>
+          <p>
+            초기에는 VM 생성부터 애플리케이션 배포까지 한 흐름으로 묶으려
+            했습니다. 테스트 과정에서 두 작업의 권한과 실패 방식이 다르다는 것을
+            확인하고, 인프라 변경은 Gjallar로, 애플리케이션 배포는 Heimdall로
+            책임을 분리했습니다.
+          </p>
+        </div>
+        <div className="evolution">
+          <article>
+            <span>01 · LEARN</span>
+            <strong>K-Le-PaaS</strong>
+            <p>
+              입력 → 계획 → 확인 → 실행 → 피드백으로 운영 요청을 구조화했습니다.
+            </p>
+          </article>
+          <div className="evolution-arrow">→</div>
+          <article className="evolution-split">
+            <span>02 · SPLIT RESPONSIBILITY</span>
+            <div>
+              <strong>Heimdall</strong>
+              <p>애플리케이션 배포와 Preview 전환</p>
+            </div>
+            <div>
+              <strong>Gjallar</strong>
+              <p>Proxmox 관찰과 제한된 변경 통제</p>
+            </div>
+          </article>
+        </div>
+        <div className="profile-grid">
+          <section>
+            <Label>VALIDATION ENVIRONMENT</Label>
+            <h2>직접 운영하는 환경에서 확인합니다.</h2>
+            <p>
+              Proxmox 3노드와 IPFire로 분리한 RED·GREEN·ORANGE 네트워크,
+              NAS/NFS, WireGuard·OCI reverse proxy 환경에서 정상 경로와 실패
+              경로를 검증합니다.
+            </p>
+            <div className="tag-list">
+              <span>Proxmox VE 3-node</span>
+              <span>IPFire segmentation</span>
+              <span>NAS / NFS</span>
+              <span>WireGuard / OCI</span>
+            </div>
+          </section>
+          <section>
+            <Label>CORE SKILLS</Label>
+            <div className="skill-list">
+              <div>
+                <strong>Platform</strong>
+                <span>Linux · Docker · Kubernetes · Proxmox</span>
+              </div>
+              <div>
+                <strong>Backend</strong>
+                <span>Python · FastAPI · PostgreSQL · REST API</span>
+              </div>
+              <div>
+                <strong>Delivery</strong>
+                <span>Git · NGINX · GitHub Actions · Prometheus</span>
+              </div>
+              <div>
+                <strong>Network</strong>
+                <span>IPFire · WireGuard · Reverse Proxy · NFS</span>
+              </div>
+            </div>
+          </section>
+        </div>
+        <aside className="principle-note">
+          <Label>COMMON STANDARD</Label>
           <strong>
-            개발자가 인프라의 세부 절차보다 자신의 제품에 집중하도록 돕는 신뢰 가능한
-            셀프서비스 플랫폼
+            실행 전 대상을 고정하고, 실행 후 실제 상태를 확인하며, 불확실한
+            결과를 성공으로 바꾸지 않습니다.
           </strong>
         </aside>
+      </Page>
 
-        <PageMark current="02" label="PRINCIPLE" />
-      </section>
-
-      <section
-        className="sheet project-sheet"
-        data-page-format="a4"
-        id="heimdall"
-        aria-label="Heimdall 프로젝트"
+      <Page
+        page="03"
+        section="PROJECT 01 / HEIMDALL"
+        title="PROBLEM & DECISION"
       >
-        <div className="sheet-topline">
-          <span>SELECTED WORK</span>
-          <span>DEPLOYMENT AUTOMATION</span>
+        <ProjectIntro
+          number="01"
+          name="HEIMDALL"
+          category="APPLICATION DELIVERY AUTOMATION · PERSONAL PROJECT"
+          title="저장소 등록부터 Preview 전환까지 반복 배포 절차를 하나의 흐름으로 자동화했습니다."
+          summary="공개 GitHub 저장소를 Docker Preview로 배포하는 self-hosted 플랫폼입니다. 애플리케이션마다 반복하던 빌드·실행·DB·공개 경로 준비를 공용 배포 흐름으로 묶었습니다."
+        />
+        <div className="case-grid">
+          <CaseCard
+            label="PROBLEM"
+            title="애플리케이션마다 실행 환경과 공개 경로를 반복해서 준비해야 했습니다."
+          >
+            저장소 checkout과 Docker build·실행, 환경 설정, 프로젝트 DB, NGINX
+            route를 애플리케이션마다 다시 연결하고 결과를 별도로 확인해야
+            했습니다.
+          </CaseCard>
+          <CaseCard
+            label="ROOT CAUSE"
+            title="배포에 필요한 설정과 작업 순서가 재사용 가능한 실행 단위로 구조화되지 않았습니다."
+          >
+            commit·환경 설정·DB 연결·route 구성과 검증 절차가 개별 작업으로
+            흩어져 있어, 같은 배포 과정을 애플리케이션마다 반복해야 했습니다.
+          </CaseCard>
+          <CaseCard
+            label="DECISION"
+            title="입력을 고정하면 candidate 준비부터 검증·전환까지 자동 실행되도록 만들었습니다."
+            result
+          >
+            exact commit과 설정 snapshot을 기준으로 Docker candidate와 필요한
+            DB·route를 준비합니다. health와 route probe까지 통과하면 Preview를
+            전환하고, 실패하면 기존 정상 경로를 유지합니다.
+          </CaseCard>
         </div>
-
-        <ProjectHeader number="01" name="HEIMDALL" meta="PERSONAL · AI-ASSISTED" />
-
-        <div className="project-title">
-          <h2>외부 배포의 반복을 하나의 요청으로 줄였습니다.</h2>
-          <div className="metric">
-            <strong>약 5분</strong>
-            <span>Docker 빌드 포함</span>
-          </div>
-        </div>
-
-        <div className="case-rows">
-          <CaseRow label="PROBLEM" title="외부에 띄우기까지의 과정이 매번 귀찮았습니다.">
-            소스 준비, Docker 이미지 빌드, 컨테이너 실행, 상태 확인과 공개 경로 연결을
-            프로젝트마다 반복해야 했습니다.
-          </CaseRow>
-          <CaseRow label="SOLUTION" title="저장소 등록 이후의 배포 흐름을 연결했습니다.">
-            서비스 구성을 한 번 등록하면 commit 선택부터 빌드, 실행, 상태 확인과 Preview
-            연결까지 수행하는 셀프 호스팅 도구를 만들었습니다.
-          </CaseRow>
-          <CaseRow label="RESULT" title="저장소에서 공개 URL까지 약 5분 안에 연결했습니다.">
-            DNS와 공개 Edge가 준비된 홈랩에서 저장소 등록부터 외부 URL 응답까지 Docker
-            빌드를 포함해 검증했습니다.
-          </CaseRow>
-        </div>
-
-        <div className="flow-compare" aria-label="배포 흐름 전후 비교">
+        <div className="before-after">
           <div>
-            <span>BEFORE</span>
-            <p>소스 → 빌드 → 실행 → 확인 → 공개 경로 연결</p>
+            <Label>BEFORE</Label>
+            <strong>애플리케이션마다 VM·Docker·공개 경로를 수동 준비</strong>
+            <p>새 버전의 실행 여부와 실제 서비스 응답을 별도로 확인</p>
           </div>
           <div>
-            <span>AFTER</span>
-            <p>저장소와 설정 등록 → 배포 요청 → 공개 URL</p>
+            <Label>AFTER</Label>
+            <strong>실행 중인 공용 플랫폼에 저장소와 설정을 등록</strong>
+            <p>candidate 검증과 Preview 전환을 하나의 배포 흐름으로 수행</p>
           </div>
         </div>
+        <div className="architecture" aria-label="Heimdall 배포 아키텍처">
+          <div>
+            <span>CONTROL</span>
+            <strong>React UI</strong>
+            <small>deployment request</small>
+          </div>
+          <i>→</i>
+          <div>
+            <span>CONTROL</span>
+            <strong>FastAPI + DB</strong>
+            <small>snapshot · job state</small>
+          </div>
+          <i>→</i>
+          <div>
+            <span>RUNTIME</span>
+            <strong>Worker</strong>
+            <small>Docker execution</small>
+          </div>
+          <i>→</i>
+          <div className="architecture-accent">
+            <span>VERIFY</span>
+            <strong>Health + Route</strong>
+            <small>promotion gate</small>
+          </div>
+        </div>
+      </Page>
 
-        <aside className="responsibility-box">
-          <span>AUTOMATION WITH RESPONSIBILITY</span>
+      <Page
+        page="04"
+        section="PROJECT 01 / HEIMDALL"
+        title="IMPLEMENTATION & EVIDENCE"
+      >
+        <div className="page-title project-page-title">
+          <Label>AUTOMATED DELIVERY WITH A SAFETY GATE</Label>
+          <h1>
+            저장소 등록부터 Preview 전환까지 하나의 배포 작업으로 실행합니다.
+          </h1>
           <p>
-            새 배포를 별도 candidate로 검증하고, 실패하면 기존 정상 Preview를 유지하도록
-            설계했습니다.
+            배포 대상을 고정한 뒤 build·실행·health·route 검증과 전환을 순서대로
+            자동화했습니다. candidate 검증은 안전한 전환을 위한 조건입니다.
           </p>
-        </aside>
-
-        <a
-          className="evidence-link"
-          href="https://github.com/CodingPenguin-yoon/heimdall_final"
-          target="_blank"
-          rel="noreferrer"
-        >
-          github.com/CodingPenguin-yoon/heimdall_final ↗
-        </a>
-
-        <PageMark current="03" label="HEIMDALL" />
-      </section>
-
-      <section
-        className="sheet project-sheet"
-        data-page-format="a4"
-        id="gjallar"
-        aria-label="Gjallar 프로젝트"
-      >
-        <div className="sheet-topline">
-          <span>SELECTED WORK</span>
-          <span>PROXMOX OPERATIONS</span>
         </div>
-
-        <ProjectHeader number="02" name="GJALLAR" meta="PERSONAL · AI-ASSISTED" />
-
-        <div className="project-title">
-          <h2>반복하던 VM 작업을 웹의 셀프서비스 흐름으로 바꿨습니다.</h2>
-          <div className="metric">
-            <strong>5개</strong>
-            <span>실제 작업 검증</span>
-          </div>
-        </div>
-
-        <div className="case-rows">
-          <CaseRow label="PROBLEM" title="VM 한 대를 만들기 전후로 확인할 것이 많았습니다.">
-            노드와 가용 리소스를 일일이 확인하고, 생성 이후의 작업도 Proxmox 화면에서 각각
-            수행해야 했습니다.
-          </CaseRow>
-          <CaseRow label="SOLUTION" title="리소스 확인과 VM 생명주기를 하나의 화면에 모았습니다.">
-            노드 상태와 가용 리소스를 보여주고, 원하는 사양을 입력해 VM을 생성하고 관리하는
-            웹 도구를 만들었습니다.
-          </CaseRow>
-          <CaseRow label="RESULT" title="실제 Proxmox 홈랩에서 모든 핵심 흐름을 확인했습니다.">
-            VM 생성, 시작, 종료, 잠금 해제와 삭제까지 다섯 작업을 end-to-end로 검증했습니다.
-          </CaseRow>
-        </div>
-
-        <div className="operation-strip" aria-label="검증한 작업">
-          {['CREATE', 'START', 'SHUTDOWN', 'UNLOCK', 'DELETE'].map((operation, index) => (
-            <div key={operation}>
-              <span>0{index + 1}</span>
-              <strong>{operation}</strong>
-            </div>
+        <ol className="step-flow five-steps">
+          {executionSteps.map(([number, name, body]) => (
+            <li key={number}>
+              <span>{number}</span>
+              <strong>{name}</strong>
+              <p>{body}</p>
+            </li>
           ))}
-        </div>
-
-        <aside className="responsibility-box">
-          <span>AUTOMATION WITH RESPONSIBILITY</span>
-          <p>
-            API 요청 접수만 성공으로 보지 않고 task 종료와 실제 VM 상태를 다시 확인하도록
-            만들었습니다.
-          </p>
-        </aside>
-
-        <a
-          className="evidence-link"
-          href="https://github.com/CodingPenguin-yoon/Gjallar"
-          target="_blank"
-          rel="noreferrer"
-        >
-          github.com/CodingPenguin-yoon/Gjallar ↗
-        </a>
-
-        <PageMark current="04" label="GJALLAR" />
-      </section>
-
-      <section
-        className="sheet project-sheet"
-        data-page-format="a4"
-        id="klepaas"
-        aria-label="K-Le-PaaS 프로젝트"
-      >
-        <div className="sheet-topline">
-          <span>SELECTED WORK</span>
-          <span>NATURAL LANGUAGE OPERATIONS</span>
-        </div>
-
-        <ProjectHeader number="03" name="K-LE-PAAS" meta="TEAM OF 2 · COMPETITION PROTOTYPE" />
-
-        <div className="project-title">
-          <h2>Kubernetes 명령어의 진입장벽을 자연어 흐름으로 낮췄습니다.</h2>
-          <div className="metric">
-            <strong>E2E</strong>
-            <span>실행 결과 확인</span>
-          </div>
-        </div>
-
-        <div className="case-rows">
-          <CaseRow label="PROBLEM" title="초보 개발자는 작업보다 명령어부터 배워야 했습니다.">
-            Pod 상태를 확인하거나 리소스를 변경하려면 Kubernetes 명령어와 개념을 먼저
-            익혀야 했습니다.
-          </CaseRow>
-          <CaseRow label="SOLUTION" title="자연어 요청을 확인 가능한 실행 흐름으로 바꿨습니다.">
-            자연어를 Kubernetes 작업으로 변환하고, 실행 전 확인과 실행 결과 반환까지
-            연결했습니다.
-          </CaseRow>
-          <CaseRow label="RESULT" title="NKS 환경에서 실제 상태 변화를 시연했습니다.">
-            조회, 롤백, 재시작과 스케일링을 수행하고 터미널에서 Kubernetes 상태 변화를
-            확인했습니다.
-          </CaseRow>
-        </div>
-
-        <div className="role-grid">
-          <div>
-            <span>MY ROLE</span>
-            <strong>인프라 작업 전반</strong>
-            <strong>백엔드 자연어 변환</strong>
-          </div>
-          <div>
-            <span>SCOPE</span>
+        </ol>
+        <div className="evidence-panel">
+          <div className="evidence-lead">
+            <Label>FAILURE INJECTION</Label>
+            <strong>의도적으로 backend 시작 실패를 넣었습니다.</strong>
             <p>
-              2인 공모전 프로토타입입니다. 심사 현장에서 Pod 상태 조회가 한 차례 사용됐으며,
-              지속적인 실사용 사례는 아닙니다.
+              3-tier 테스트 애플리케이션의 새 candidate가 중단되고, 이전 stable
+              Preview의 응답이 계속 제공되는 것을 실제 배포로 확인했습니다.
+            </p>
+          </div>
+          <div className="status-sequence">
+            <div>
+              <span>NEW</span>
+              <strong>candidate failed</strong>
+            </div>
+            <i>≠</i>
+            <div className="status-good">
+              <span>ACTIVE</span>
+              <strong>stable kept serving</strong>
+            </div>
+          </div>
+        </div>
+        <div className="result-grid">
+          <CaseCard
+            label="RESULT 01"
+            title="실행 중인 플랫폼에서 3분 이내에 전환했습니다."
+            result
+          >
+            개인 홈페이지의 build·health·route 검증과 Preview 전환까지
+            확인했습니다. 이 시간에는 VM 생성이 포함되지 않습니다.
+          </CaseCard>
+          <CaseCard
+            label="RESULT 02"
+            title="프로젝트별 PostgreSQL도 함께 제공했습니다."
+            result
+          >
+            3-tier 테스트에서 프로젝트별 DB·role 생성과 password-file 기반 연결
+            정보 주입을 확인했습니다.
+          </CaseCard>
+        </div>
+        <div className="scope-grid">
+          <div>
+            <Label>AUTOMATED FLOW</Label>
+            <p>
+              Public GitHub · fixed main · manual deploy · single Docker host ·
+              health and route gate
+            </p>
+          </div>
+          <div>
+            <Label>NEXT EXTENSIONS</Label>
+            <p>
+              VM provisioning · private Git · automatic webhook · TLS ·
+              multi-host · data rollback
             </p>
           </div>
         </div>
-
-        <aside className="responsibility-box">
-          <span>AUTOMATION WITH RESPONSIBILITY</span>
-          <p>
-            자연어를 바로 실행하지 않고 사용자가 해석된 작업을 확인한 뒤 실행하도록
-            구성했습니다.
-          </p>
-        </aside>
-
-        <a
-          className="evidence-link"
-          href="https://www.youtube.com/watch?v=tY4XmxIsDok"
-          target="_blank"
-          rel="noreferrer"
-        >
-          youtube.com/watch?v=tY4XmxIsDok · 12-minute demo ↗
-        </a>
-
-        <PageMark current="05" label="K-LE-PAAS" />
-      </section>
-
-      <section className="sheet closing" data-page-format="a4" aria-label="마무리와 연락처">
-        <div className="sheet-topline">
-          <span>CHO YUNHO</span>
-          <span>PLATFORM ENGINEER</span>
+        <div className="link-row">
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final">
+            Repository ↗
+          </a>
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final/blob/main/backend/tests/test_nginx_gateway.py">
+            Gateway tests ↗
+          </a>
+          <a href="https://github.com/CodingPenguin-yoon/heimdall_final/blob/main/backend/tests/integration/test_worker_runtime_smoke.py">
+            Runtime smoke ↗
+          </a>
         </div>
+      </Page>
 
-        <div className="closing-statement">
-          <p className="kicker">THE WORK I WANT TO CONTINUE</p>
-          <h2>
-            팀이 반복하는 일을 발견하고,
-            <strong>믿고 맡길 수 있는 플랫폼으로 만들겠습니다.</strong>
-          </h2>
+      <Page page="05" section="PROJECT 02 / GJALLAR" title="PROBLEM & DECISION">
+        <ProjectIntro
+          number="02"
+          name="GJALLAR"
+          category="CONTROLLED INFRASTRUCTURE OPERATIONS · PERSONAL PROJECT"
+          title="API 응답이 아니라 변경 후 실제 VM 상태로 성공을 판단합니다."
+          summary="Proxmox actual inventory를 관찰하고, 제한된 변경을 사전 검증·승인·사후 확인 절차로 실행하는 운영 제어 도구입니다."
+        />
+        <div className="case-grid">
+          <CaseCard
+            label="PROBLEM"
+            title="수동 VM 작업은 반복 입력과 사전 조건 누락에 취약했습니다."
+          >
+            VM마다 CPU·메모리 사양과 IP를 다시 확인해야 했고, 중복 요청이나 IP
+            충돌을 작업 전에 일관되게 차단하기 어려웠습니다.
+          </CaseCard>
+          <CaseCard
+            label="RISK"
+            title="Proxmox가 요청을 수락해도 목표 상태에 도달했다고 단정할 수 없었습니다."
+          >
+            비동기 task의 timeout, 누락된 task reference, task 완료 후 실제 상태
+            불일치가 발생할 수 있으므로 API 응답과 운영 결과를 분리해야
+            했습니다.
+          </CaseCard>
+          <CaseCard
+            label="DECISION"
+            title="관찰과 제한된 변경 통제에 제품 범위를 좁혔습니다."
+            result
+          >
+            live inventory를 기준으로 권한·IP·network·storage를 확인하고, 승인된
+            작업만 실행합니다. 전체 VM lifecycle 자동화보다 안전한 실행 경계를
+            우선했습니다.
+          </CaseCard>
         </div>
-
-        <div className="closing-grid">
+        <div className="truth-model">
           <section>
-            <p className="case-label">WHAT I BRING</p>
-            <ol>
-              <li>
-                <span>01</span>
-                <p>실제 불편에서 출발해 자동화할 문제를 구체적으로 정의합니다.</p>
-              </li>
-              <li>
-                <span>02</span>
-                <p>복잡한 인프라 절차를 개발자가 사용할 수 있는 흐름으로 바꿉니다.</p>
-              </li>
-              <li>
-                <span>03</span>
-                <p>속도뿐 아니라 검증, 실패, 기존 상태 보존까지 성공 기준에 포함합니다.</p>
-              </li>
-            </ol>
+            <Label>SOURCE OF TRUTH</Label>
+            <h3>Proxmox VE</h3>
+            <p>
+              Node / VM inventory
+              <br />
+              Task reference and status
+              <br />
+              Observed resource state
+            </p>
           </section>
-
-          <section className="project-index">
-            <p className="case-label">PROJECT INDEX</p>
-            <div>
-              <span>01</span>
-              <strong>Heimdall</strong>
-              <small>Deployment automation</small>
-            </div>
-            <div>
-              <span>02</span>
-              <strong>Gjallar</strong>
-              <small>Proxmox operations</small>
-            </div>
-            <div>
-              <span>03</span>
-              <strong>K-Le-PaaS</strong>
-              <small>Natural language operations</small>
-            </div>
+          <div className="truth-arrows">
+            <span>READ LIVE STATE</span>
+            <strong>⇄</strong>
+            <span>EXECUTE EXPLICIT CHANGE</span>
+          </div>
+          <section className="truth-control">
+            <Label>OPERATION RECORD</Label>
+            <h3>Gjallar</h3>
+            <p>
+              Operator intent and policy
+              <br />
+              Approval · idempotency
+              <br />
+              Post-check and reconciliation
+            </p>
           </section>
         </div>
-
-        <footer className="contact-block">
+        <div className="before-after compact-compare">
           <div>
-            <p>CONTACT</p>
-            <strong>조윤호 · Platform Engineer</strong>
+            <Label>BEFORE</Label>
+            <strong>VM마다 사양·IP 조건을 다시 확인</strong>
           </div>
-          <div className="contact-links">
-            <a href="mailto:code.penguin.yoon@gmail.com">code.penguin.yoon@gmail.com</a>
-            <a href="https://github.com/CodingPenguin-yoon">github.com/CodingPenguin-yoon</a>
-            <a href="https://yoonman.page">yoonman.page</a>
+          <div>
+            <Label>AFTER</Label>
+            <strong>Profile 재사용 + live preflight로 잘못된 요청 차단</strong>
           </div>
-        </footer>
+        </div>
+      </Page>
 
-        <PageMark current="06" label="CONTACT" />
-      </section>
+      <Page
+        page="06"
+        section="PROJECT 02 / GJALLAR"
+        title="EXECUTION & EVIDENCE"
+      >
+        <div className="page-title project-page-title">
+          <Label>GUARDED EXECUTION</Label>
+          <h1>
+            변경 작업을 같은 버튼이 아니라, 같은 검증 원칙으로 묶었습니다.
+          </h1>
+          <p>
+            작업별 위험은 다르지만 모든 변경은 계획·확인·실행·실제 상태 재조회로
+            끝납니다.
+          </p>
+        </div>
+        <ol className="step-flow six-steps">
+          {operationSteps.map(([number, name, body]) => (
+            <li key={number}>
+              <span>{number}</span>
+              <strong>{name}</strong>
+              <p>{body}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="operation-grid">
+          <article>
+            <span>01</span>
+            <strong>CREATE VM</strong>
+            <p>Profile · IP preflight · 승인 · UPID · 생성 후 상태 확인</p>
+          </article>
+          <article>
+            <span>02</span>
+            <strong>START</strong>
+            <p>명시적 확인 · idempotency · task polling · running 확인</p>
+          </article>
+          <article>
+            <span>03</span>
+            <strong>GRACEFUL SHUTDOWN</strong>
+            <p>허용 상태 확인 · 제한된 실행 · 종료 상태 재조회</p>
+          </article>
+          <article>
+            <span>04</span>
+            <strong>GUIDED UNLOCK</strong>
+            <p>짧은 지침 발급 · 운영자 실행 · API로 lock 해제 확인</p>
+          </article>
+        </div>
+        <div className="non-success">
+          <Label>NON-SUCCESS PATH</Label>
+          <div>
+            <article>
+              <strong>TIMEOUT</strong>
+              <p>응답 지연을 자동 성공으로 변경하지 않음</p>
+            </article>
+            <article>
+              <strong>MISSING TASK</strong>
+              <p>task reference가 없으면 결과를 확정하지 않음</p>
+            </article>
+            <article>
+              <strong>STATE MISMATCH</strong>
+              <p>예상 상태와 다르면 재확인 대상으로 기록</p>
+            </article>
+          </div>
+        </div>
+        <div className="result-grid gjallar-results">
+          <CaseCard
+            label="RESULT"
+            title="반복 입력을 줄이고, 변경 결과를 실제 상태로 다시 확인했습니다."
+            result
+          >
+            VM Profile로 자원 사양을 재사용하고 IP 충돌을 사전에 확인합니다.
+            Create·Start·graceful Shutdown·제한된 guided unlock의 task와
+            after-state를 검증했습니다.
+          </CaseCard>
+          <CaseCard
+            label="CONTROL RANGE"
+            title="반복 작업은 자동화하고, 고위험 변경은 운영자 판단에 남겼습니다."
+          >
+            Create·Start·graceful Shutdown과 제한된 guided unlock을 승인
+            흐름으로 제공하고, migration·snapshot·임의 shell 작업은
+            분리했습니다.
+          </CaseCard>
+        </div>
+        <div className="link-row single-link">
+          <a href="https://github.com/CodingPenguin-yoon/Gjallar">
+            github.com/CodingPenguin-yoon/Gjallar ↗
+          </a>
+        </div>
+      </Page>
+
+      <Page
+        page="07"
+        section="PROJECT 03 / K-LE-PAAS"
+        title="PROBLEM & APPROACH"
+      >
+        <ProjectIntro
+          number="03"
+          name="K-LE-PAAS"
+          category="KUBERNETES OPERATIONS · TEAM OF 2 · 2025.09-12"
+          title="모호한 자연어를 허용된 Kubernetes 실행 계획으로 바꿨습니다."
+          summary="웹과 Slack의 운영 요청을 해석하고, 사용자가 확인할 수 있는 계획과 실행 결과·모니터링 피드백으로 연결한 팀 프로젝트입니다."
+        />
+        <div className="case-grid three-column-case">
+          <CaseCard
+            label="PROBLEM"
+            title="자연어를 그대로 실행하면 해석 오류가 운영 변경으로 이어질 수 있습니다."
+          >
+            모호한 요청에서 대상과 의도를 분리하고, 시스템이 지원하는 작업과
+            인자만 실행하도록 제한할 필요가 있었습니다.
+          </CaseCard>
+          <CaseCard
+            label="SOLUTION"
+            title="요청을 CommandRequest와 허용된 CommandPlan으로 구조화했습니다."
+          >
+            상태·로그 조회, 재시작·스케일링·버전 롤백 API로 연결하고 실행 결과와
+            외부 URL을 다시 사용자에게 반환했습니다.
+          </CaseCard>
+          <CaseCard
+            label="RESULT"
+            title="실행 결과와 운영 정보를 다시 사용자에게 연결했습니다."
+            result
+          >
+            Kubernetes 작업 결과에 더해 Prometheus 지표와 Ingress 외부 URL을
+            웹·Slack 요청 흐름으로 반환했습니다.
+          </CaseCard>
+        </div>
+        <div className="command-flow">
+          <div>
+            <Label>INPUT EXAMPLE</Label>
+            <strong>K-Le-PaaS/test01 재시작해줘</strong>
+          </div>
+          <i>→</i>
+          <div>
+            <Label>INTERPRET</Label>
+            <strong>intent + repository</strong>
+          </div>
+          <i>→</i>
+          <div>
+            <Label>PLAN</Label>
+            <strong>k8s_restart_deployment</strong>
+          </div>
+          <i>→</i>
+          <div className="command-result">
+            <Label>FEEDBACK</Label>
+            <strong>state · URL · metrics</strong>
+          </div>
+        </div>
+        <div className="before-after klepaas-decision">
+          <div>
+            <Label>INITIAL OPTION</Label>
+            <strong>온프레미스 배포 + NCP 게이트웨이</strong>
+            <p>직접 운영 환경을 활용하는 구성을 검토</p>
+          </div>
+          <div>
+            <Label>TEAM DECISION</Label>
+            <strong>NCP SourcePipeline → NKS</strong>
+            <p>공모전 조건과 구축 범위를 비교해 NCP 배포 흐름으로 합의</p>
+          </div>
+        </div>
+      </Page>
+
+      <Page
+        page="08"
+        section="PROJECT 03 / K-LE-PAAS"
+        title="IMPLEMENTATION & EVIDENCE"
+      >
+        <div className="page-title project-page-title klepaas-detail-title">
+          <Label>FROM REQUEST TO FEEDBACK</Label>
+          <h1>
+            요청을 실행하고, 상태·URL·지표를 다시 사용자에게 돌려줬습니다.
+          </h1>
+          <p>
+            자연어를 자유 형식 명령으로 실행하지 않고, 검증 가능한 작업 단위로
+            변환해 Kubernetes API와 NKS 관측 경로에 연결했습니다.
+          </p>
+        </div>
+        <ol className="step-flow five-steps klepaas-steps">
+          {klepaasSteps.map(([number, name, body]) => (
+            <li key={number}>
+              <span>{number}</span>
+              <strong>{name}</strong>
+              <p>{body}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="contribution-grid klepaas-contribution">
+          <section>
+            <Label>MY CONTRIBUTION</Label>
+            <ul>
+              <li>
+                <strong>자연어 실행 계획</strong>
+                command·parameters 구조화와 Kubernetes 실행·조회 연결
+              </li>
+              <li>
+                <strong>NKS 모니터링</strong>
+                Prometheus 설치·수집 대상 구성, CPU·메모리·디스크·네트워크 조회
+                API
+              </li>
+              <li>
+                <strong>서비스 접근 경로</strong>
+                Ingress 외부 주소와 사용자·저장소별 service URL 생성·저장·조회
+              </li>
+            </ul>
+          </section>
+          <section className="pr-list">
+            <Label>MERGED EVIDENCE</Label>
+            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/28">
+              <strong>PR #28</strong>
+              <span>NLP / Kubernetes operations</span>
+            </a>
+            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/42">
+              <strong>PR #42</strong>
+              <span>NKS monitoring API</span>
+            </a>
+            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/63">
+              <strong>PR #63</strong>
+              <span>Deployment URL</span>
+            </a>
+          </section>
+        </div>
+        <div className="klepaas-runtime-detail">
+          <div>
+            <Label>RESTART TARGET</Label>
+            <strong>owner / repository → Deployment</strong>
+            <p>저장소 식별자를 실행 대상 namespace와 Deployment로 매핑</p>
+          </div>
+          <div>
+            <Label>API ACTION</Label>
+            <strong>patch_namespaced_deployment()</strong>
+            <p>pod template annotation을 변경해 rollout restart 수행</p>
+          </div>
+          <div>
+            <Label>AFTER STATE</Label>
+            <strong>state · metrics · service URL</strong>
+            <p>실행 이후 확인에 필요한 운영 정보를 요청 흐름으로 반환</p>
+          </div>
+        </div>
+        <div className="klepaas-evidence-strip">
+          <div>
+            <Label>DELIVERY RECORD</Label>
+            <strong>Backend·Frontend authored merged PR 48개</strong>
+          </div>
+          <div>
+            <Label>RUNTIME RESULT</Label>
+            <strong>NKS 작업·모니터링·Ingress URL 흐름 시연</strong>
+          </div>
+          <a href="https://www.youtube.com/watch?v=tY4XmxIsDok">
+            <span>DEMO</span>
+            <strong>12-minute walkthrough ↗</strong>
+          </a>
+        </div>
+      </Page>
+
+      <Page
+        page="09"
+        section="VALIDATION & CONTACT"
+        title="ENGINEERING CONTEXT"
+      >
+        <div className="page-title compact-title final-title">
+          <Label>WHERE I VERIFY</Label>
+          <h1>직접 운영하는 환경에서 정상 경로와 실패 경로를 확인합니다.</h1>
+          <p>
+            기능 구현을 API 응답에서 끝내지 않고, 네트워크 경로와 런타임·자원
+            상태까지 확인할 수 있는 환경을 유지합니다.
+          </p>
+        </div>
+        <div className="lab-flow">
+          <div>
+            <span>PUBLIC</span>
+            <strong>Client</strong>
+            <small>request</small>
+          </div>
+          <i>→</i>
+          <div>
+            <span>EDGE</span>
+            <strong>OCI Reverse Proxy</strong>
+            <small>public route</small>
+          </div>
+          <i>→</i>
+          <div>
+            <span>TUNNEL</span>
+            <strong>WireGuard</strong>
+            <small>encrypted path</small>
+          </div>
+          <i>→</i>
+          <div className="lab-core">
+            <span>BOUNDARY</span>
+            <strong>IPFire</strong>
+            <small>RED · GREEN · ORANGE</small>
+          </div>
+        </div>
+        <div className="zone-grid">
+          <article>
+            <span>GREEN / MANAGEMENT</span>
+            <strong>Proxmox VE 3-node</strong>
+            <p>VM inventory · task · management access</p>
+          </article>
+          <article>
+            <span>ORANGE / SERVICE</span>
+            <strong>Heimdall · service VMs</strong>
+            <p>Docker Preview · NGINX route · public workloads</p>
+          </article>
+          <article>
+            <span>STORAGE</span>
+            <strong>NAS / NFS</strong>
+            <p>shared storage and project validation</p>
+          </article>
+        </div>
+        <div className="proof-summary">
+          <Label>WHAT THESE PROJECTS SHOW</Label>
+          <ol>
+            <li>
+              <span>01</span>
+              <strong>배포</strong>
+              <p>
+                반복되던 build·DB·route 준비와 Preview 전환을 하나의 배포
+                흐름으로 자동화했습니다.
+              </p>
+            </li>
+            <li>
+              <span>02</span>
+              <strong>인프라 변경</strong>
+              <p>
+                권한·중복 방지·task·actual state 확인으로 제한된 변경을
+                통제했습니다.
+              </p>
+            </li>
+            <li>
+              <span>03</span>
+              <strong>운영 인터페이스</strong>
+              <p>
+                모호한 자연어를 허용된 계획으로 바꾸고 결과와 지표를 다시
+                연결했습니다.
+              </p>
+            </li>
+          </ol>
+        </div>
+        <div className="final-grid">
+          <section>
+            <Label>EDUCATION & CERTIFICATIONS</Label>
+            <strong>광운대학교 전자통신공학과 · 2026.02 졸업</strong>
+            <p>정보처리기사 · 리눅스마스터 2급</p>
+          </section>
+          <section className="final-contact">
+            <Label>CONTACT</Label>
+            <strong>조윤호 · Platform Engineer</strong>
+            <a href="mailto:code.penguin.yoon@gmail.com">
+              code.penguin.yoon@gmail.com
+            </a>
+            <a href="https://github.com/CodingPenguin-yoon">
+              github.com/CodingPenguin-yoon
+            </a>
+            <a href="https://yoonman.page">yoonman.page</a>
+          </section>
+        </div>
+      </Page>
     </main>
   );
 }
