@@ -36,8 +36,8 @@ test('프로젝트 케이스 스터디가 아홉 장의 A4 문서로 구성된�
     'PROBLEM',
     'SOLUTION',
     'RESULT',
-    'AUTOMATED FLOW',
-    'NEXT EXTENSIONS',
+    'LIVE DEPLOYMENT',
+    'CURRENT SCOPE',
   ]) {
     assert.match(html, new RegExp(marker));
   }
@@ -45,19 +45,30 @@ test('프로젝트 케이스 스터디가 아홉 장의 A4 문서로 구성된�
   assert.match(html, /PR #28/);
   assert.match(html, /PR #42/);
   assert.match(html, /PR #63/);
-  assert.match(html, /authored merged PR 48개/);
+  assert.match(html, /Backend 27 \+ Frontend 21 · merged PR 48개/);
   assert.match(html, /FROM REQUEST TO FEEDBACK/);
   assert.match(html, /patch_namespaced_deployment/);
   assert.doesNotMatch(html, /지속적인 실사용 성과로 확대하지 않습니다/);
   assert.doesNotMatch(html, /NOT CLAIMED/);
   assert.doesNotMatch(html, /전면 자동화라고 부르지 않습니다/);
-  assert.match(html, /3분 이내/);
-  assert.match(html, /VM 생성이 포함되지 않습니다/);
+  assert.doesNotMatch(html, /3분 이내/);
+  assert.match(html, /2-minute demo/);
+  assert.match(html, /https:\/\/youtu\.be\/-fzROUCZEAQ/);
   assert.match(html, /guided unlock/);
   assert.match(html, /반복 배포 절차를 하나의 흐름으로 자동화했습니다/);
   assert.match(html, /AUTOMATED DELIVERY WITH A SAFETY GATE/);
   assert.doesNotMatch(html, /프로세스가 실행됐다는 사실만으로는/);
   assert.doesNotMatch(html, /AI-ASSISTED/);
+});
+
+test('표지 연락처와 Heimdall 실증 자료가 링크와 이미지로 제공된다', async () => {
+  const html = await loadPortfolio();
+
+  assert.match(html, /href="https:\/\/github\.com\/CodingPenguin-yoon"/);
+  assert.match(html, /href="mailto:code\.penguin\.yoon@gmail\.com"/);
+  assert.match(html, /href="https:\/\/yoonman\.page"/);
+  assert.match(html, /src="\/images\/heimdall-deployment\.png"/);
+  assert.match(html, /src="\/images\/heimdall-chat-preview\.png"/);
 });
 
 test('모든 페이지에 완전한 페이지 번호가 있다', async () => {

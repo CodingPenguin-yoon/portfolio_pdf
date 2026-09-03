@@ -1,3 +1,5 @@
+/* oxlint-disable next/no-img-element -- local screenshots must render deterministically in the PDF export */
+
 type PageProps = {
   page: string;
   section: string;
@@ -152,9 +154,13 @@ export default function Home() {
         <div className="cover-contact">
           <strong>조윤호 · Platform Engineer</strong>
           <div>
-            <span>github.com/CodingPenguin-yoon</span>
-            <span>code.penguin.yoon@gmail.com</span>
-            <span>yoonman.page</span>
+            <a href="https://github.com/CodingPenguin-yoon">
+              github.com/CodingPenguin-yoon
+            </a>
+            <a href="mailto:code.penguin.yoon@gmail.com">
+              code.penguin.yoon@gmail.com
+            </a>
+            <a href="https://yoonman.page">yoonman.page</a>
           </div>
         </div>
       </Page>
@@ -319,6 +325,7 @@ export default function Home() {
         page="04"
         section="PROJECT 01 / HEIMDALL"
         title="IMPLEMENTATION & EVIDENCE"
+        className="heimdall-evidence-page"
       >
         <div className="page-title project-page-title">
           <Label>AUTOMATED DELIVERY WITH A SAFETY GATE</Label>
@@ -339,62 +346,73 @@ export default function Home() {
             </li>
           ))}
         </ol>
+        <div className="live-proof-grid">
+          <figure>
+            <img
+              src="/images/heimdall-deployment.png"
+              alt="Heimdall의 배포 단계 완료 상태와 실시간 서비스 로그"
+            />
+            <figcaption>
+              <Label>LIVE DEPLOYMENT</Label>
+              <strong>단계별 진행 상태와 서비스 로그를 함께 확인</strong>
+            </figcaption>
+          </figure>
+          <figure>
+            <img
+              src="/images/heimdall-chat-preview.png"
+              alt="Heimdall을 통해 배포한 실시간 채팅 Preview"
+            />
+            <figcaption>
+              <Label>LIVE PREVIEW</Label>
+              <strong>Frontend·Backend·PostgreSQL을 연결한 실제 서비스</strong>
+            </figcaption>
+          </figure>
+        </div>
         <div className="evidence-panel">
           <div className="evidence-lead">
-            <Label>FAILURE INJECTION</Label>
-            <strong>의도적으로 backend 시작 실패를 넣었습니다.</strong>
+            <Label>FAILURE TEST</Label>
+            <strong>
+              Backend 시작 실패를 주입해 Preview 전환 차단을 확인했습니다.
+            </strong>
             <p>
-              3-tier 테스트 애플리케이션의 새 candidate가 중단되고, 이전 stable
-              Preview의 응답이 계속 제공되는 것을 실제 배포로 확인했습니다.
+              3-tier 테스트 애플리케이션의 새 candidate에서 Backend 시작 실패를
+              발생시켰습니다. Health 검증 실패로 전환이 중단됐고, 기존 stable
+              Preview는 같은 URL에서 계속 응답했습니다.
             </p>
           </div>
           <div className="status-sequence">
-            <div>
+            <div className="status-failed">
               <span>NEW</span>
               <strong>candidate failed</strong>
             </div>
-            <i>≠</i>
+            <i>→</i>
+            <div className="status-blocked">
+              <span>PROMOTION</span>
+              <strong>blocked</strong>
+            </div>
+            <i>→</i>
             <div className="status-good">
               <span>ACTIVE</span>
               <strong>stable kept serving</strong>
             </div>
           </div>
         </div>
-        <div className="result-grid">
-          <CaseCard
-            label="RESULT 01"
-            title="실행 중인 플랫폼에서 3분 이내에 전환했습니다."
-            result
-          >
-            개인 홈페이지의 build·health·route 검증과 Preview 전환까지
-            확인했습니다. 이 시간에는 VM 생성이 포함되지 않습니다.
-          </CaseCard>
-          <CaseCard
-            label="RESULT 02"
-            title="프로젝트별 PostgreSQL도 함께 제공했습니다."
-            result
-          >
-            3-tier 테스트에서 프로젝트별 DB·role 생성과 password-file 기반 연결
-            정보 주입을 확인했습니다.
-          </CaseCard>
-        </div>
-        <div className="scope-grid">
+        <div className="runtime-evidence-strip">
           <div>
-            <Label>AUTOMATED FLOW</Label>
-            <p>
-              Public GitHub · fixed main · manual deploy · single Docker host ·
-              health and route gate
-            </p>
+            <Label>RUNTIME</Label>
+            <strong>Frontend + Backend + Managed PostgreSQL</strong>
           </div>
           <div>
-            <Label>NEXT EXTENSIONS</Label>
-            <p>
-              VM provisioning · private Git · automatic webhook · TLS ·
-              multi-host · data rollback
-            </p>
+            <Label>VERIFY</Label>
+            <strong>service health + NGINX route probe</strong>
+          </div>
+          <div>
+            <Label>CURRENT SCOPE</Label>
+            <strong>Public GitHub · fixed main · single Docker host</strong>
           </div>
         </div>
         <div className="link-row">
+          <a href="https://youtu.be/-fzROUCZEAQ">2-minute demo ↗</a>
           <a href="https://github.com/CodingPenguin-yoon/heimdall_final">
             Repository ↗
           </a>
@@ -493,8 +511,9 @@ export default function Home() {
             변경 작업을 같은 버튼이 아니라, 같은 검증 원칙으로 묶었습니다.
           </h1>
           <p>
-            작업별 위험은 다르지만 모든 변경은 계획·확인·실행·실제 상태 재조회로
-            끝납니다.
+            현재 구현한 Create·Start·graceful Shutdown은 사전 확인·실행·task
+            추적·실제 상태 재조회로 끝납니다. Guided unlock은 운영자 실행 후
+            해제 상태를 다시 확인합니다.
           </p>
         </div>
         <ol className="step-flow six-steps">
@@ -552,8 +571,8 @@ export default function Home() {
             result
           >
             VM Profile로 자원 사양을 재사용하고 IP 충돌을 사전에 확인합니다.
-            Create·Start·graceful Shutdown·제한된 guided unlock의 task와
-            after-state를 검증했습니다.
+            Create·Start·graceful Shutdown의 task와 after-state를 검증했고,
+            guided unlock은 운영자 실행 후 lock 해제를 재조회합니다.
           </CaseCard>
           <CaseCard
             label="CONTROL RANGE"
@@ -721,7 +740,7 @@ export default function Home() {
         <div className="klepaas-evidence-strip">
           <div>
             <Label>DELIVERY RECORD</Label>
-            <strong>Backend·Frontend authored merged PR 48개</strong>
+            <strong>Backend 27 + Frontend 21 · merged PR 48개</strong>
           </div>
           <div>
             <Label>RUNTIME RESULT</Label>
