@@ -1001,26 +1001,31 @@ a {
   color: var(--ink);
   font-size: 8pt;
 }
-.pr-list {
+.key-contributions {
   padding: 5mm;
   background: var(--blue-soft);
 }
-.pr-list > a {
-  display: grid;
-  grid-template-columns: 20mm 1fr;
-  padding: 3mm 0;
-  border-top: 1px solid #c9d8f3;
-  color: var(--blue-dark);
-}
-.pr-list > a:first-of-type {
+.key-contributions ul {
   margin-top: 3mm;
+  padding-left: 0;
+  list-style: none;
 }
-.pr-list strong {
+.key-contributions li {
+  position: relative;
+  margin: 0;
+  padding: 3mm 0 3mm 5mm;
+  border-top: 1px solid #c9d8f3;
+  color: var(--ink);
   font-size: 8pt;
+  font-weight: 700;
+  line-height: 1.45;
 }
-.pr-list span {
-  color: var(--muted);
-  font-size: 6.4pt;
+.key-contributions li::before {
+  position: absolute;
+  top: 3.1mm;
+  left: 0;
+  color: var(--blue);
+  content: "→";
 }
 .klepaas-decision {
   margin-top: 8mm;

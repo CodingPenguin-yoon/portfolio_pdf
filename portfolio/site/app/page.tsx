@@ -113,12 +113,13 @@ export default function Home() {
         <div className="cover-copy">
           <Label>PLATFORM ENGINEER</Label>
           <h1>
-            반복되는 운영 절차를 줄이고,
-            <strong>실제 결과로 성공을 확인합니다.</strong>
+            직접 굴려보며 이해하고,
+            <strong>반복되는 불편을 도구로 바꿉니다.</strong>
           </h1>
           <p>
-            배포와 인프라 변경을 재사용 가능한 흐름으로 만들고, 요청 접수가
-            아니라 서비스와 자원의 실제 상태를 기준으로 완료 여부를 판단합니다.
+            서버와 네트워크를 직접 구성하고 서비스를 운영하며 생긴 문제를 끝까지
+            따라갑니다. 한 번 해결한 불편은 다시 사람의 주의에 맡기지 않도록
+            자동화하려 합니다.
           </p>
         </div>
         <div className="cover-projects">
@@ -168,17 +169,16 @@ export default function Home() {
       <Page page="02" section="ENGINEER PROFILE" title="RESPONSIBILITY MAP">
         <div className="page-title compact-title">
           <Label>HOW THE WORK EVOLVED</Label>
-          <h1>제어 대상과 성공 조건을 나눠 운영 자동화를 설계했습니다.</h1>
+          <h1>궁금한 것을 직접 확인하는 과정에서 운영 자동화를 시작했습니다.</h1>
           <p>
-            초기에는 VM 생성부터 애플리케이션 배포까지 한 흐름으로 묶으려
-            했습니다. 테스트 과정에서 두 작업의 권한과 실패 방식이 다르다는 것을
-            확인하고, 인프라 변경은 Gjallar로, 애플리케이션 배포는 Heimdall로
-            책임을 분리했습니다.
+            홈랩에 서비스를 추가할 때마다 VM 사양과 IP를 다시 정했고, 수동 주소
+            관리 중 IP 충돌도 겪었습니다. K-Le-PaaS에서 요청을 계획과 실행 단위로
+            나누는 경험을 한 뒤 반복 절차를 도구로 만들기 시작했습니다.
           </p>
         </div>
         <div className="evolution">
           <article>
-            <span>01 · LEARN</span>
+            <span>01 · LEARN TO STRUCTURE</span>
             <strong>K-Le-PaaS</strong>
             <p>
               입력 → 계획 → 확인 → 실행 → 피드백으로 운영 요청을 구조화했습니다.
@@ -186,7 +186,7 @@ export default function Home() {
           </article>
           <div className="evolution-arrow">→</div>
           <article className="evolution-split">
-            <span>02 · SPLIT RESPONSIBILITY</span>
+            <span>02 · REDEFINE THE SCOPE</span>
             <div>
               <strong>Heimdall</strong>
               <p>애플리케이션 배포와 Preview 전환</p>
@@ -236,10 +236,10 @@ export default function Home() {
           </section>
         </div>
         <aside className="principle-note">
-          <Label>COMMON STANDARD</Label>
+          <Label>WHAT CHANGED IN MY APPROACH</Label>
           <strong>
-            실행 전 대상을 고정하고, 실행 후 실제 상태를 확인하며, 불확실한
-            결과를 성공으로 바꾸지 않습니다.
+            VM 생성과 애플리케이션 배포를 한 흐름으로 묶으려다 성공 조건과 복구
+            범위가 다르다는 것을 확인했고, Gjallar와 Heimdall로 책임을 나눴습니다.
           </strong>
         </aside>
       </Page>
@@ -253,8 +253,8 @@ export default function Home() {
           number="01"
           name="HEIMDALL"
           category="APPLICATION DELIVERY AUTOMATION · PERSONAL PROJECT"
-          title="저장소 등록부터 Preview 전환까지 반복 배포 절차를 하나의 흐름으로 자동화했습니다."
-          summary="공개 GitHub 저장소를 Docker Preview로 배포하는 self-hosted 플랫폼입니다. 애플리케이션마다 반복하던 빌드·실행·DB·공개 경로 준비를 공용 배포 흐름으로 묶었습니다."
+          title="VM 생성부터 배포까지 한 번에 묶으려다, 책임을 다시 나눴습니다."
+          summary="처음에는 Proxmox VM 생성과 애플리케이션 배포를 하나의 흐름으로 만들려 했습니다. 구현과 시험 과정에서 두 작업의 성공 조건과 실패 시 보존 범위가 다르다는 것을 확인했습니다."
         />
         <div className="case-grid">
           <CaseCard
@@ -266,20 +266,21 @@ export default function Home() {
             했습니다.
           </CaseCard>
           <CaseCard
-            label="ROOT CAUSE"
-            title="배포에 필요한 설정과 작업 순서가 재사용 가능한 실행 단위로 구조화되지 않았습니다."
+            label="FIRST ATTEMPT"
+            title="Proxmox template clone부터 애플리케이션 배포까지 잇는 통합 프로토타입을 만들었습니다."
           >
-            commit·환경 설정·DB 연결·route 구성과 검증 절차가 개별 작업으로
-            흩어져 있어, 같은 배포 과정을 애플리케이션마다 반복해야 했습니다.
+            VM을 만들고 CPU·메모리를 조정한 뒤 SSH 준비, 애플리케이션 전달과
+            실행까지 연결하려 했습니다. 하지만 이 통합 흐름을 end-to-end로
+            완성하기 전에 제어 대상의 차이를 발견했습니다.
           </CaseCard>
           <CaseCard
-            label="DECISION"
-            title="입력을 고정하면 candidate 준비부터 검증·전환까지 자동 실행되도록 만들었습니다."
+            label="TURNING POINT"
+            title="VM 생성과 애플리케이션 배포의 권한·실패 범위·완료 조건이 달랐습니다."
             result
           >
-            exact commit과 설정 snapshot을 기준으로 Docker candidate와 필요한
-            DB·route를 준비합니다. health와 route probe까지 통과하면 Preview를
-            전환하고, 실패하면 기존 정상 경로를 유지합니다.
+            완성되지 않은 통합을 밀어붙이지 않고 VM 운영은 Gjallar로,
+            애플리케이션 배포는 Heimdall로 분리했습니다. Heimdall은 실행 중인
+            공용 플랫폼의 배포와 Preview 전환에 집중했습니다.
           </CaseCard>
         </div>
         <div className="before-after">
@@ -328,13 +329,14 @@ export default function Home() {
         className="heimdall-evidence-page"
       >
         <div className="page-title project-page-title">
-          <Label>AUTOMATED DELIVERY WITH A SAFETY GATE</Label>
+          <Label>AUTOMATED DELIVERY WITH A SAFETY GATE · RESULT</Label>
           <h1>
-            저장소 등록부터 Preview 전환까지 하나의 배포 작업으로 실행합니다.
+            실패한 candidate가 기존 서비스를 건드리지 않는지 확인했습니다.
           </h1>
           <p>
-            배포 대상을 고정한 뒤 build·실행·health·route 검증과 전환을 순서대로
-            자동화했습니다. candidate 검증은 안전한 전환을 위한 조건입니다.
+            책임을 나눈 뒤 반복 배포 절차를 하나의 흐름으로 자동화했습니다.
+            현재 범위는 Public GitHub·fixed main·single Docker host이며, 배포
+            대상을 고정한 뒤 검증을 통과한 candidate만 활성화합니다.
           </p>
         </div>
         <ol className="step-flow five-steps">
@@ -400,15 +402,15 @@ export default function Home() {
         <div className="runtime-evidence-strip">
           <div>
             <Label>RUNTIME</Label>
-            <strong>Frontend + Backend + Managed PostgreSQL</strong>
+            <strong>Frontend + Backend + Project PostgreSQL</strong>
           </div>
           <div>
             <Label>VERIFY</Label>
             <strong>service health + NGINX route probe</strong>
           </div>
           <div>
-            <Label>CURRENT SCOPE</Label>
-            <strong>Public GitHub · fixed main · single Docker host</strong>
+            <Label>CURRENT SCOPE / WORKING RULE</Label>
+            <strong>실패했을 때 지켜야 할 상태를 먼저 정의</strong>
           </div>
         </div>
         <div className="link-row">
@@ -430,28 +432,29 @@ export default function Home() {
           number="02"
           name="GJALLAR"
           category="CONTROLLED INFRASTRUCTURE OPERATIONS · PERSONAL PROJECT"
-          title="API 응답이 아니라 변경 후 실제 VM 상태로 성공을 판단합니다."
-          summary="Proxmox actual inventory를 관찰하고, 제한된 변경을 사전 검증·승인·사후 확인 절차로 실행하는 운영 제어 도구입니다."
+          title="IP 충돌을 겪은 뒤, VM 변경을 사람의 기억에만 맡기지 않기로 했습니다."
+          summary="홈랩의 VM 사양과 주소를 직접 관리하며 겪은 반복과 실수를 줄이기 위해, Proxmox의 실제 상태를 읽고 제한된 변경을 통제하는 도구를 만들었습니다."
         />
         <div className="case-grid">
           <CaseCard
             label="PROBLEM"
-            title="수동 VM 작업은 반복 입력과 사전 조건 누락에 취약했습니다."
+            title="VM마다 사양과 IP를 다시 정했고, 수동으로 주소를 관리하다 IP가 충돌했습니다."
           >
-            VM마다 CPU·메모리 사양과 IP를 다시 확인해야 했고, 중복 요청이나 IP
-            충돌을 작업 전에 일관되게 차단하기 어려웠습니다.
+            같은 용도의 VM도 vCPU·메모리·디스크를 반복해서 입력했습니다. 작업
+            전에 live inventory를 확인하지 않으면 같은 실수를 사람의 주의로만
+            막아야 했습니다.
           </CaseCard>
           <CaseCard
-            label="RISK"
-            title="Proxmox가 요청을 수락해도 목표 상태에 도달했다고 단정할 수 없었습니다."
+            label="DESIGN RISK"
+            title="요청 수락과 목표 상태 도달은 서로 다른 결과입니다."
           >
-            비동기 task의 timeout, 누락된 task reference, task 완료 후 실제 상태
-            불일치가 발생할 수 있으므로 API 응답과 운영 결과를 분리해야
-            했습니다.
+            비동기 작업은 timeout이나 task reference 누락, 완료 후 상태 불일치가
+            생길 수 있다고 보고 API 응답과 운영 결과를 분리해 확인하도록
+            설계했습니다.
           </CaseCard>
           <CaseCard
-            label="DECISION"
-            title="관찰과 제한된 변경 통제에 제품 범위를 좁혔습니다."
+            label="SOLUTION"
+            title="사양을 재사용하고, 변경 전후의 실제 상태를 확인하도록 했습니다."
             result
           >
             live inventory를 기준으로 권한·IP·network·storage를 확인하고, 승인된
@@ -548,7 +551,7 @@ export default function Home() {
           </article>
         </div>
         <div className="non-success">
-          <Label>NON-SUCCESS PATH</Label>
+          <Label>DESIGNED NON-SUCCESS PATH</Label>
           <div>
             <article>
               <strong>TIMEOUT</strong>
@@ -575,12 +578,12 @@ export default function Home() {
             guided unlock은 운영자 실행 후 lock 해제를 재조회합니다.
           </CaseCard>
           <CaseCard
-            label="CONTROL RANGE"
-            title="반복 작업은 자동화하고, 고위험 변경은 운영자 판단에 남겼습니다."
+            label="WHAT CHANGED"
+            title="자동으로 실행해도 되는 범위와 운영자가 판단해야 하는 범위를 먼저 나누게 됐습니다."
           >
             Create·Start·graceful Shutdown과 제한된 guided unlock을 승인
-            흐름으로 제공하고, migration·snapshot·임의 shell 작업은
-            분리했습니다.
+            흐름으로 제공합니다. migration·snapshot·임의 shell 작업은 현재 실행
+            범위에 포함하지 않았습니다.
           </CaseCard>
         </div>
         <div className="link-row single-link">
@@ -599,8 +602,8 @@ export default function Home() {
           number="03"
           name="K-LE-PAAS"
           category="KUBERNETES OPERATIONS · TEAM OF 2 · 2025.09-12"
-          title="모호한 자연어를 허용된 Kubernetes 실행 계획으로 바꿨습니다."
-          summary="웹과 Slack의 운영 요청을 해석하고, 사용자가 확인할 수 있는 계획과 실행 결과·모니터링 피드백으로 연결한 팀 프로젝트입니다."
+          title="자연어 운영 요청을 실행하기 전에, 검증 가능한 계획으로 바꿨습니다."
+          summary="2인 팀에서 자연어 요구 변환과 인프라 모니터링을 맡았습니다. 웹과 Slack의 요청을 제한된 실행 계획으로 바꾸고 결과·지표·접근 URL을 다시 사용자에게 연결했습니다."
         />
         <div className="case-grid three-column-case">
           <CaseCard
@@ -611,19 +614,20 @@ export default function Home() {
             인자만 실행하도록 제한할 필요가 있었습니다.
           </CaseCard>
           <CaseCard
-            label="SOLUTION"
+            label="MY ROLE"
             title="요청을 CommandRequest와 허용된 CommandPlan으로 구조화했습니다."
           >
             상태·로그 조회, 재시작·스케일링·버전 롤백 API로 연결하고 실행 결과와
             외부 URL을 다시 사용자에게 반환했습니다.
           </CaseCard>
           <CaseCard
-            label="RESULT"
-            title="실행 결과와 운영 정보를 다시 사용자에게 연결했습니다."
+            label="TEAM DECISION"
+            title="공모전 조건과 개발 기간을 기준으로 NCP 배포 흐름에 합의했습니다."
             result
           >
-            Kubernetes 작업 결과에 더해 Prometheus 지표와 Ingress 외부 URL을
-            웹·Slack 요청 흐름으로 반환했습니다.
+            저는 온프레미스 배포와 NCP 게이트웨이를, 팀원은 NCP 중심 구성을
+            제안했습니다. 공동 목표와 제약을 비교해 NCP SourcePipeline과 NKS를
+            사용하고 담당 기능의 완성도에 집중했습니다.
           </CaseCard>
         </div>
         <div className="command-flow">
@@ -650,13 +654,13 @@ export default function Home() {
         <div className="before-after klepaas-decision">
           <div>
             <Label>INITIAL OPTION</Label>
-            <strong>온프레미스 배포 + NCP 게이트웨이</strong>
-            <p>직접 운영 환경을 활용하는 구성을 검토</p>
+            <strong>내가 제안한 온프레미스 배포 + NCP 게이트웨이</strong>
+            <p>직접 운영 환경을 활용하는 구성을 제안</p>
           </div>
           <div>
-            <Label>TEAM DECISION</Label>
+            <Label>WHY WE CHANGED</Label>
             <strong>NCP SourcePipeline → NKS</strong>
-            <p>공모전 조건과 구축 범위를 비교해 NCP 배포 흐름으로 합의</p>
+            <p>공모전 조건·개발 기간·줄일 수 있는 구축 범위를 함께 비교</p>
           </div>
         </div>
       </Page>
@@ -704,20 +708,13 @@ export default function Home() {
               </li>
             </ul>
           </section>
-          <section className="pr-list">
-            <Label>MERGED EVIDENCE</Label>
-            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/28">
-              <strong>PR #28</strong>
-              <span>NLP / Kubernetes operations</span>
-            </a>
-            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/42">
-              <strong>PR #42</strong>
-              <span>NKS monitoring API</span>
-            </a>
-            <a href="https://github.com/K-Le-PaaS/backend-hybrid/pull/63">
-              <strong>PR #63</strong>
-              <span>Deployment URL</span>
-            </a>
+          <section className="key-contributions">
+            <Label>WHAT CHANGED</Label>
+            <ul>
+              <li>자유 형식 요청보다 검증 가능한 중간 표현을 먼저 만듭니다.</li>
+              <li>기술 선택은 개인 취향보다 프로젝트의 제약으로 결정합니다.</li>
+              <li>실행 결과를 사용자가 확인할 피드백까지 연결합니다.</li>
+            </ul>
           </section>
         </div>
         <div className="klepaas-runtime-detail">
@@ -740,7 +737,7 @@ export default function Home() {
         <div className="klepaas-evidence-strip">
           <div>
             <Label>DELIVERY RECORD</Label>
-            <strong>Backend 27 + Frontend 21 · merged PR 48개</strong>
+            <strong>Backend 27 + Frontend 21 · merged PR 48개 (authored)</strong>
           </div>
           <div>
             <Label>RUNTIME RESULT</Label>
@@ -756,14 +753,15 @@ export default function Home() {
       <Page
         page="09"
         section="VALIDATION & CONTACT"
-        title="ENGINEERING CONTEXT"
+        title="CURRENT DIRECTION"
       >
         <div className="page-title compact-title final-title">
-          <Label>WHERE I VERIFY</Label>
-          <h1>직접 운영하는 환경에서 정상 경로와 실패 경로를 확인합니다.</h1>
+          <Label>HOME LAB FAILURE CASE</Label>
+          <h1>직접 구성하고, 문제가 생기면 흐름을 나눠 확인합니다.</h1>
           <p>
-            기능 구현을 API 응답에서 끝내지 않고, 네트워크 경로와 런타임·자원
-            상태까지 확인할 수 있는 환경을 유지합니다.
+            망분리 후 외부 서비스가 끊겼을 때 보안 경계를 되돌리지 않고 요청과
+            반환 경로를 나눠 단절 구간을 좁혔습니다. 필요한 경로를 복구하면서
+            ORANGE에서 GREEN 관리망으로의 접근 차단은 유지했습니다.
           </p>
         </div>
         <div className="lab-flow">
@@ -809,30 +807,24 @@ export default function Home() {
           </article>
         </div>
         <div className="proof-summary">
-          <Label>WHAT THESE PROJECTS SHOW</Label>
+          <Label>HOW I WORK NOW</Label>
           <ol>
             <li>
               <span>01</span>
-              <strong>배포</strong>
-              <p>
-                반복되던 build·DB·route 준비와 Preview 전환을 하나의 배포
-                흐름으로 자동화했습니다.
-              </p>
+              <strong>직접 확인</strong>
+              <p>궁금한 것은 직접 구성하고, 문제를 흐름과 경계로 나눠 확인합니다.</p>
             </li>
             <li>
               <span>02</span>
-              <strong>인프라 변경</strong>
-              <p>
-                권한·중복 방지·task·actual state 확인으로 제한된 변경을
-                통제했습니다.
-              </p>
+              <strong>도구로 남기기</strong>
+              <p>한 번 해결한 과정은 다음에 다시 사용할 수 있는 도구로 남깁니다.</p>
             </li>
             <li>
               <span>03</span>
-              <strong>운영 인터페이스</strong>
+              <strong>작게 완성하기</strong>
               <p>
-                모호한 자연어를 허용된 계획으로 바꾸고 결과와 지표를 다시
-                연결했습니다.
+                범위가 커지면 한 흐름부터 완성하며, 인프라와 애플리케이션 사이의
+                반복을 줄이고 재사용할 도구를 더 깊게 만들고 싶습니다.
               </p>
             </li>
           </ol>
